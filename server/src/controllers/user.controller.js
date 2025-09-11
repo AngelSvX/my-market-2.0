@@ -1,4 +1,4 @@
-import { addCategories, userProfileData } from "../services/user.service.js";
+import { addCategories, getCommentsByPost, userProfileData } from "../services/user.service.js";
 
 // Controlador para todos los usuarios
 export const userProfileDataController = async (req, res) => {
@@ -19,6 +19,20 @@ export const addCategoriesController = async (req, res) => {
     const { name } = req.body
 
     const response = await addCategories(name)
+
+    return res.status(200).json({response: response})
+
+  } catch (error) {
+    return res.status(500).json({error})
+  }
+}
+
+// Controlador para todos
+export const getCommentsByPostController = async (req, res) => {
+  try {
+    
+    const id = req.params.id
+    const response = await getCommentsByPost(id)
 
     return res.status(200).json({response: response})
 

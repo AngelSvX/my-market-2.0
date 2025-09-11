@@ -1,6 +1,6 @@
 import { myMarketDB } from "../settings/db.js";
 
-// Funcionalidad para todos
+// Funcionalidad para todos - ver datos del usuario
 export const userProfileData = async (id) => {
   try {
     const myPostQuery = `
@@ -45,6 +45,31 @@ export const userProfileData = async (id) => {
   }
 };
 
+// Funcionalidad para todos - ver comentarios y valoraciones de una publicación
+export const getCommentsByPost = async (id) => {
+  try {
+
+    const myQuery = `
+    SELECT r.rating, r.comment, r.created_at, u.name FROM reviews r
+    INNER JOIN users u ON r.user_id = u.id
+    INNER JOIN works w ON r.work_id = w.id
+    WHERE w.id = ?;
+    `;
+
+    const [response] = await myMarketDB.execute(
+      myQuery,
+      [id]
+    )
+
+    console.log(response)
+
+    return response
+
+  } catch (error) {
+    throw error
+  }
+};
+
 // Funcionalidad para administrador
 export const addCategories = async (roleName) => {
   try {
@@ -54,17 +79,13 @@ export const addCategories = async (roleName) => {
       VALUES (?)
     `;
 
-    const response = await myMarketDB.execute(
-      addCategoryQuery,
-      [roleName]
-    )
+    const response = await myMarketDB.execute(addCategoryQuery, [roleName]);
 
-    return{
+    return {
       message: "Inserción de categoría correcta",
-      response: response
+      response: response,
     };
-
   } catch (error) {
-    throw error
+    throw error;
   }
 };
