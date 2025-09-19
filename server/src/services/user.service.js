@@ -48,7 +48,6 @@ export const userProfileData = async (id) => {
 // Funcionalidad para todos - ver comentarios y valoraciones de una publicación
 export const getCommentsByPost = async (id) => {
   try {
-
     const myQuery = `
     SELECT r.rating, r.comment, r.created_at, u.name FROM reviews r
     INNER JOIN users u ON r.user_id = u.id
@@ -56,12 +55,27 @@ export const getCommentsByPost = async (id) => {
     WHERE w.id = ?;
     `;
 
-    const [response] = await myMarketDB.execute(
-      myQuery,
-      [id]
-    )
+    const [response] = await myMarketDB.execute(myQuery, [id]);
 
-    console.log(response)
+    console.log(response);
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Funcionalidad para todos - ver publicaciones
+export const getAllPosts = async () => {
+  try {
+    const myQuery = `
+      SELECT w.id, w.title, w.description, w.status, w.price, c.name as "category", w.created_at, wi.url, u.name, u.email FROM work_images wi
+      INNER JOIN works w ON wi.work_id = w.id
+      INNER JOIN users u ON w.user_id = u.id
+      INNER JOIN categories c ON w.category_id = c.id
+    `;
+    
+    const [response] = await myMarketDB.execute(myQuery)
 
     return response
 

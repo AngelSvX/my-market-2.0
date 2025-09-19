@@ -15,20 +15,19 @@ export const PageLayout = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          {/* Links de navegación extra */}
+
           <nav className="flex space-x-6 text-gray-700 font-medium">
-            <Link to='/publicaciones' className="hover:text-indigo-600 transition-colors">
+            <Link to='/market' className="hover:text-indigo-600 transition-colors">
               Inicio
             </Link>
-            <a href="#" className="hover:text-indigo-600 transition-colors">
+            <Link to="#" className="hover:text-indigo-600 transition-colors">
               Sobre Nosotros
-            </a>
-            <a href="#" className="hover:text-indigo-600 transition-colors">
+            </Link>
+            <Link to="#" className="hover:text-indigo-600 transition-colors">
               Contacto
-            </a>
+            </Link>
           </nav>
 
-          {/* Usuario */}
           <div className="flex items-center space-x-4 flex-row">
             <div className="flex flex-col">
               <span className="text-gray-600">
@@ -47,7 +46,6 @@ export const PageLayout = () => {
         </div>
       </header>
 
-      {/* Main */}
       <main className="flex-1 max-w-7xl mx-auto px-6 py-6">
         <Outlet />
       </main>

@@ -4,6 +4,7 @@ import RegisterPage from "../../pages/Register/ui/RegisterPage";
 import { PageLayout } from "../../widgets/PageLayout/PageLayout";
 import RoleRedirect from "./components/RoleRedirect";
 import ProtectedRoutes from "./ProtectedRoutes";
+import MarketPage from "../../pages/Market/MarketPage";
 
 
 const router = createBrowserRouter([
@@ -20,8 +21,8 @@ const router = createBrowserRouter([
     element: <PageLayout/>,
     children:[
       {
-        path: "/market/publicaciones",
-        element: <div>Aquí estarán todas las publicaciones</div>
+        path: "/market",
+        element: <MarketPage/>
       }
     ]
   },

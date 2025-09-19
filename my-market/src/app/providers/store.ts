@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from '../../features/auth/login/model/slice'
+import postsReducer from '../../features/market-place/model/slice'
 
 export const store = configureStore({
   reducer: {
-    login: loginReducer
+    login: loginReducer,
+    posts: postsReducer
   }
 })
 
