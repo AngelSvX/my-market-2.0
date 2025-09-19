@@ -1,4 +1,4 @@
-import { addCategories, getCommentsByPost, userProfileData } from "../services/user.service.js";
+import { addCategories, getAllPosts, getCommentsByPost, userProfileData } from "../services/user.service.js";
 
 // Controlador para todos los usuarios
 export const userProfileDataController = async (req, res) => {
@@ -35,6 +35,18 @@ export const getCommentsByPostController = async (req, res) => {
     const response = await getCommentsByPost(id)
 
     return res.status(200).json({response: response})
+
+  } catch (error) {
+    return res.status(500).json({error})
+  }
+}
+
+// Controlador para todos
+export const getAllPostsController = async (req, res) => {
+  try {
+    const response = await getAllPosts()
+
+    return res.status(200).json(response)
 
   } catch (error) {
     return res.status(500).json({error})
