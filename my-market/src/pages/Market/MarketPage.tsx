@@ -1,5 +1,5 @@
-import React from 'react'
-import Posts from '../../features/market-place/ui/Posts'
+
+import Posts from '../../features/market-place/posts/ui/Posts'
 
 function MarketPage() {
   return (

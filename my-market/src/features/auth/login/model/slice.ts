@@ -3,37 +3,48 @@ import type { AuthPayload, DecodedToken, LoginState } from "./types";
 import { fetchLogin } from "./thunks";
 import { jwtDecode } from "jwt-decode";
 
-export const initialState : LoginState = {
+export const initialState: LoginState = {
   data: null,
   error: null,
   loading: false,
-  userData: null
-}
+  userData: null,
+};
 
 export const loginSlice = createSlice({
-  name: 'login',
+  name: "login",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchLogin.pending, (state: LoginState) => {
-        state.loading = true,
-        state.error = null
+        (state.loading = true), (state.error = null);
       })
-      .addCase(fetchLogin.fulfilled, (state: LoginState, action: PayloadAction<AuthPayload>) => {
-        state.loading = false,
-        state.data = action.payload
+      .addCase(
+        fetchLogin.fulfilled,
+        (state: LoginState, action: PayloadAction<AuthPayload>) => {
+          state.loading = false;
+          state.data = action.payload;
 
-        const decoded : DecodedToken = jwtDecode(action.payload.response.token)
+          const token = action.payload.response.token;
 
-        state.userData = decoded
-
-      })
+          if (token && token.split(".").length === 3) {
+            try {
+              const decoded: DecodedToken = jwtDecode(token);
+              state.userData = decoded;
+            } catch (error) {
+              console.error("Error al decodificar el token:", error);
+              state.userData = null;
+            }
+          } else {
+            state.userData = null;
+          }
+        }
+      )
       .addCase(fetchLogin.rejected, (state: LoginState, action) => {
-        state.loading = false,
-        state.error = action.payload || "Ocurrió un error inesperado"
-      })
-  }
-})
+        (state.loading = false),
+          (state.error = action.payload || "Ocurrió un error inesperado");
+      });
+  },
+});
 
-export default loginSlice.reducer
+export default loginSlice.reducer;

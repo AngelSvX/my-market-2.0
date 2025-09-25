@@ -20,15 +20,20 @@ function LoginForm() {
     password: ""
   })
 
+  const handleForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const result = await dispatch(fetchLogin(form)).unwrap();
+      // si llega aquí, el login fue exitoso
+      navigate("/");
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
-  const handleForm = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(fetchLogin(form))
-    navigate("/")
-  }
 
   useEffect(() => {
     if (data?.response?.token && userData?.role) {
@@ -37,9 +42,12 @@ function LoginForm() {
     }
   }, [data?.response?.token]);
 
-  if (loading) return <LoaderMessage message="Obteniendo Datos..."/>
+  if (loading) return <LoaderMessage message="Obteniendo Datos..." />
 
-  console.log(userData)
+  console.log(data, "DATA")
+  console.log(userData, "USER DATA")
+  console.log(form.email)
+  console.log(form.password)
 
   return (
     <form onSubmit={handleForm} className="w-full max-w-sm bg-white px-5 space-y-6">
