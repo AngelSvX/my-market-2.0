@@ -1,19 +1,27 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Navigate } from "react-router"
+import type { RootState } from "../store";
+import { useSelector } from "react-redux";
 
 function RoleRedirect() {
 
-  const token = localStorage.getItem("token")
-  const role = localStorage.getItem("role")
+  const { data, userData} = useSelector((state: RootState) => state.login);
 
-  if (!token) {
+  useEffect(() => {
+    if (data?.response?.token && userData?.role) {
+      localStorage.setItem("token", data.response.token);
+      localStorage.setItem("role", userData.role);
+    }
+  }, [data?.response?.token, userData?.role]);
+
+  if (!userData?.role) {
     return <Navigate to="/login" replace />
   }
 
-  console.log(token)
-  console.log(role)
+  console.log(data?.response.token)
+  console.log(userData.role)
 
-  switch (role) {
+  switch (userData.role) {
     case "Administrador":
       return <Navigate to="/admin" replace />;
     case "Vendedor":

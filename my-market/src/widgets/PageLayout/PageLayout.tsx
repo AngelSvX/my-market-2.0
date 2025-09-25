@@ -8,8 +8,16 @@ import type { DecodedToken } from "../../features/auth/login/model/types";
 export const PageLayout = () => {
   const { userData } = useSelector((state: RootState) => state.login);
 
-  const token = localStorage.getItem("token") || ""
-  const decoded : DecodedToken = jwtDecode(token)
+  const token = localStorage.getItem("token");
+  let decoded: DecodedToken | null = null;
+
+  if (token && token.split(".").length === 3) {
+    try {
+      decoded = jwtDecode<DecodedToken>(token);
+    } catch (error) {
+      console.error("Token inválido:", error);
+    }
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -31,14 +39,14 @@ export const PageLayout = () => {
           <div className="flex items-center space-x-4 flex-row">
             <div className="flex flex-col">
               <span className="text-gray-600">
-                Hola, <span className="font-semibold">{userData?.name || decoded.name}</span>
+                Hola, <span className="font-semibold">{userData?.name || decoded?.name}</span>
               </span>
               <span className="text-xs font-medium text-gray-400">
-                {userData?.role || decoded.role}
+                {userData?.role || decoded?.role}
               </span>
             </div>
             <img
-              src={`https://ui-avatars.com/api/?name=${userData?.name || decoded.name}&background=6366f1&color=fff`}
+              src={`https://ui-avatars.com/api/?name=${userData?.name || decoded?.name}&background=6366f1&color=fff`}
               alt="avatar"
               className="w-10 h-10 rounded-full border border-gray-300 shadow-sm"
             />

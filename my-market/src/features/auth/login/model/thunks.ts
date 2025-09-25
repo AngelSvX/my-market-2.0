@@ -11,6 +11,8 @@ export const fetchLogin = createAsyncThunk<
   async (payload: LoginRequest, { rejectWithValue }) => {
     try {
       const res = await loginApi.login(payload);
+      console.log(res.data, "esto es el res de fetchlogin")
+
       return res.data;
     } catch (error: any) {
       const message =
