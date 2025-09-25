@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Review, ReviewState } from "./types";
-import { fetchCommentsByPost } from "./thunks";
+import { fetchCommentsByPost, addCommentByPost } from "./thunks";
 
 export const initialState: ReviewState = {
   comments: [],
@@ -33,7 +33,19 @@ export const commentsSlice = createSlice({
     .addCase(fetchCommentsByPost.rejected, (state) => {
       (state.loading = false),
       (state.error = "An error has ocurred fetching comments")
+    }),
+    builder
+    .addCase(addCommentByPost.pending, (state) => {
+      state.loading = true;
+      state.error = null;
     })
+    .addCase(addCommentByPost.fulfilled, (state) => {
+      state.loading = false;
+    })
+    .addCase(addCommentByPost.rejected, (state) => {
+      state.loading = false;
+      state.error = "An error has occurred adding comment";
+    });
   }
 })
 

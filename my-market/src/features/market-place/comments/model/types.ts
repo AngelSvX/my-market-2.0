@@ -13,3 +13,10 @@ export interface ReviewState {
   loading: boolean;
   error: string | null
 }
+
+export interface CommentParams {
+  work_id: number,
+  user_id: number,
+  rating: number,
+  comment: string
+}
