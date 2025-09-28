@@ -19,7 +19,6 @@ export interface Post {
 
 export interface PostState {
   postList: Post[];
-  commentOpenId: number | null;
   loading: boolean;
   error: string | null;
 }

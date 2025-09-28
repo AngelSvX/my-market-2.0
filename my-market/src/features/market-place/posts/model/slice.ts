@@ -4,7 +4,6 @@ import { fetchPosts } from "./thunks";
 
 export const initialState: PostState = {
   postList: [],
-  commentOpenId: null,
   loading: false,
   error: null,
 };
