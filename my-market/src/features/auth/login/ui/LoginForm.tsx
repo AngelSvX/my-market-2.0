@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import type { AppDispatch, RootState } from "../../../../app/providers/store";
 import { fetchLogin } from "../model/thunks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { LoginRequest } from '../model/types';
 import { useNavigate } from "react-router-dom";
 import { LoaderMessage } from "../../../../shared/ui/Loader/LoaderMessage";
+import { Eye, EyeClosed } from "lucide-react";
 
 function LoginForm() {
 
@@ -20,10 +21,14 @@ function LoginForm() {
     password: ""
   })
 
+  const [vissiblePassword, setVissiblePassword] = useState<boolean>(false)
+
+  console.log(vissiblePassword)
+
   const handleForm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const result = await dispatch(fetchLogin(form)).unwrap();
+      await dispatch(fetchLogin(form)).unwrap();
 
       navigate("/");
     } catch (err) {
@@ -73,15 +78,26 @@ function LoginForm() {
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Contraseña
         </label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          placeholder="••••••••"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            type={vissiblePassword ? "text" : "password"}
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          />
+          {
+            vissiblePassword ? (
+              <Eye color="#000000" className="absolute right-3 top-1/2 h-5 w-5 text-gray-400 -translate-y-1/2 cursor-pointer" onClick={() => setVissiblePassword(vissiblePassword ? false : true)} />
+            )
+              :
+              (
+                <EyeClosed color="#000000" className="absolute right-3 top-1/2 h-5 w-5 text-gray-400 -translate-y-1/2 cursor-pointer" onClick={() => setVissiblePassword(vissiblePassword ? false : true)} />
+              )
+          }
+        </div>
       </div>
 
       <button
@@ -96,7 +112,7 @@ function LoginForm() {
       }
 
       <p className="text-sm text-center text-gray-600">
-        ¿No tienes cuenta?{" "}
+        ¿No tienes cuenta?
         <Link to="/register" className="text-indigo-600 hover:underline">
           Regístrate
         </Link>
