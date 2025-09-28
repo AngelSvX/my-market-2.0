@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router";
+import { Navigate, Outlet, redirect, useNavigate } from "react-router";
 import type { RootState } from "../../app/providers/store";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import type { DecodedToken } from "../../features/auth/login/model/types";
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 export const PageLayout = () => {
   const { userData } = useSelector((state: RootState) => state.login);
@@ -19,16 +21,19 @@ export const PageLayout = () => {
     }
   }
 
+  const navigate = useNavigate()
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+
       <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
 
           <nav className="flex space-x-6 text-gray-700 font-medium">
-            <Link to='/market' className="hover:text-indigo-600 transition-colors">
+            <Link to="/market" className="hover:text-indigo-600 transition-colors">
               Inicio
             </Link>
-            <Link to="#" className="hover:text-indigo-600 transition-colors">
+            <Link to="/admin" className="hover:text-indigo-600 transition-colors">
               Sobre Nosotros
             </Link>
             <Link to="#" className="hover:text-indigo-600 transition-colors">
@@ -36,21 +41,64 @@ export const PageLayout = () => {
             </Link>
           </nav>
 
-          <div className="flex items-center space-x-4 flex-row">
-            <div className="flex flex-col">
-              <span className="text-gray-600">
-                Hola, <span className="font-semibold">{userData?.name || decoded?.name}</span>
-              </span>
-              <span className="text-xs font-medium text-gray-400">
-                {userData?.role || decoded?.role}
-              </span>
-            </div>
-            <img
-              src={`https://ui-avatars.com/api/?name=${userData?.name || decoded?.name}&background=6366f1&color=fff`}
-              alt="avatar"
-              className="w-10 h-10 rounded-full border border-gray-300 shadow-sm"
-            />
-          </div>
+          <Menu as="div" className="relative inline-block text-left">
+            <MenuButton className="flex items-center space-x-3 focus:outline-none cursor-pointer">
+              <img
+                src={`https://ui-avatars.com/api/?name=${userData?.name || decoded?.name}&background=6366f1&color=fff`}
+                alt="avatar"
+                className="w-10 h-10 rounded-full border border-gray-300 shadow-sm"
+              />
+              <div className="hidden sm:flex flex-col text-left">
+                <span className="text-gray-600 font-medium">
+                  {userData?.name || decoded?.name}
+                </span>
+                <span className="text-xs font-medium text-gray-400">
+                  {userData?.role || decoded?.role}
+                </span>
+              </div>
+              <ChevronDownIcon className="w-5 h-5 text-gray-400" />
+            </MenuButton>
+
+            <MenuItems
+              transition
+              className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/10 focus:outline-none data-closed:scale-95 data-closed:opacity-0 data-enter:duration-100 data-leave:duration-75"
+            >
+              <div className="py-1">
+                <MenuItem>
+                  <Link
+                    to="/account"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Perfil
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link
+                    to="/settings"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Configuración
+                  </Link>
+                </MenuItem>
+                <MenuItem>
+                  <button
+                    type="button"
+                    className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("role");
+
+                      setTimeout(() => {
+                        navigate("/login", { replace: true });
+                      }, 0); // 👈 asegura que el borrado termine antes de navegar
+                    }}
+                  >
+                    Cerrar sesión
+                  </button>
+                </MenuItem>
+              </div>
+            </MenuItems>
+          </Menu>
         </div>
       </header>
 

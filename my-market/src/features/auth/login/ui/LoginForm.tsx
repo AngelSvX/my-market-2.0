@@ -24,7 +24,7 @@ function LoginForm() {
     e.preventDefault();
     try {
       const result = await dispatch(fetchLogin(form)).unwrap();
-      // si llega aquí, el login fue exitoso
+
       navigate("/");
     } catch (err) {
       console.error("Login failed:", err);
@@ -35,12 +35,15 @@ function LoginForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /**
+   * 
   useEffect(() => {
     if (data?.response?.token && userData?.role) {
       localStorage.setItem("token", data.response.token);
       localStorage.setItem("role", userData?.role)
     }
   }, [data?.response?.token]);
+   */
 
   if (loading) return <LoaderMessage message="Obteniendo Datos..." />
 

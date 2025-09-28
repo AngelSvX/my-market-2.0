@@ -11,7 +11,7 @@ export const fetchCommentsByPost = createAsyncThunk(
 )
 
 export const addCommentByPost = createAsyncThunk(
-  'comments/fetchComments',
+  'comments/addComment',
   async (params: CommentParams) : Promise<void> => {
     await commentsApi.addCommentByPost(params)
   }
