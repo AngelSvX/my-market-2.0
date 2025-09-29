@@ -1,5 +1,4 @@
 import { myMarketDB } from "../settings/db.js";
-import { getCurrentDateTime } from "../utils/date.js"
 
 // Funcionalidad para todos - ver datos del usuario
 export const userProfileData = async (id) => {
@@ -104,7 +103,6 @@ export const addCategories = async (roleName) => {
   }
 };
 
-
 // Funcionalidad para todos - Añadir Comentarios
 export const addCommentByPost = async ({work_id, user_id, rating, comment}) => {
   try {
@@ -126,4 +124,55 @@ export const addCommentByPost = async ({work_id, user_id, rating, comment}) => {
   } catch (error) {
     throw error
   }
+}
+
+// Funcionalidad solo para vendedores
+export const addPost = async ({ user_id, category_id, title, description, price, status, url }) => {
+  try {
+    
+    const addPostQuery = `
+      INSERT INTO works
+      (user_id, category_id, title, description, price, status)
+      VALUES(?, ?, ?, ?, ?, ?)
+      `
+
+    console.log("Aquí se comenzará con el work")
+
+    const [work] = await myMarketDB.execute(addPostQuery, [
+      user_id,
+      category_id,
+      title,
+      description,
+      price,
+      status
+    ])
+
+    console.log("Aquí se termina con el work")
+
+    console.log(work)
+
+    const addPostImageQuery = `
+    INSERT INTO work_images
+    (work_id, url)
+    VALUES(?, ?)
+    `
+
+    console.log("Aquí comienza la inserción a work_image", work.insertId)
+
+    const [work_image] = await myMarketDB.execute(addPostImageQuery, [
+      work.insertId,
+      url
+    ])
+
+    console.log("Aquí ya se finalizó la inserción de ambos")
+    
+    return{
+      work,
+      work_image
+    }
+
+  } catch (error) {
+    throw error
+  }
+
 }

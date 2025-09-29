@@ -31,13 +31,7 @@ export const PageLayout = () => {
 
           <nav className="flex space-x-6 text-gray-700 font-medium">
             <Link to="/market" className="hover:text-indigo-600 transition-colors">
-              Inicio
-            </Link>
-            <Link to="/admin" className="hover:text-indigo-600 transition-colors">
-              Sobre Nosotros
-            </Link>
-            <Link to="#" className="hover:text-indigo-600 transition-colors">
-              Contacto
+              Market
             </Link>
           </nav>
 
@@ -66,7 +60,7 @@ export const PageLayout = () => {
               <div className="py-1">
                 <MenuItem>
                   <Link
-                    to="/account"
+                    to="/vendedor"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     Perfil
@@ -90,7 +84,7 @@ export const PageLayout = () => {
 
                       setTimeout(() => {
                         navigate("/login", { replace: true });
-                      }, 0); // 👈 asegura que el borrado termine antes de navegar
+                      }, 0);
                     }}
                   >
                     Cerrar sesión
