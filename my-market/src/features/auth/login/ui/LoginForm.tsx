@@ -12,7 +12,7 @@ function LoginForm() {
 
   const navigate = useNavigate()
 
-  const { data, error, loading, userData } = useSelector((state: RootState) => state.login);
+  const {error, loading} = useSelector((state: RootState) => state.login);
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -22,8 +22,6 @@ function LoginForm() {
   })
 
   const [vissiblePassword, setVissiblePassword] = useState<boolean>(false)
-
-  console.log(vissiblePassword)
 
   const handleForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,11 +49,6 @@ function LoginForm() {
    */
 
   if (loading) return <LoaderMessage message="Obteniendo Datos..." />
-
-  console.log(data, "DATA")
-  console.log(userData, "USER DATA")
-  console.log(form.email)
-  console.log(form.password)
 
   return (
     <form onSubmit={handleForm} className="w-full max-w-sm bg-white px-5 space-y-6">

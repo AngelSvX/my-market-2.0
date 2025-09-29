@@ -5,6 +5,7 @@ import { PageLayout } from "../../widgets/PageLayout/PageLayout";
 import RoleRedirect from "./components/RoleRedirect";
 import ProtectedRoutes from "./ProtectedRoutes";
 import MarketPage from "../../pages/Market/MarketPage";
+import VendedorPage from "../../pages/User/Vendedor/VendedorPage";
 
 
 const router = createBrowserRouter([
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
       {
         path: "/vendedor",
         element: <ProtectedRoutes allowedRoles={["Vendedor"]}>
-          <div>Vendedor</div>
+          <VendedorPage/>
         </ProtectedRoutes>,
         children:[
           {

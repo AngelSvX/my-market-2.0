@@ -1,5 +1,5 @@
 import express from 'express'
-import { addCategoriesController, addCommentByPostController, getAllPostsController, getCommentsByPostController, userProfileDataController } from '../controllers/user.controller.js'
+import { addCategoriesController, addCommentByPostController, addPostController, getAllPostsController, getCommentsByPostController, userProfileDataController } from '../controllers/user.controller.js'
 import { authenticatedToken, requireRole } from '../middlewares/auth.middleware.js'
 
 const userRouter = express.Router()
@@ -9,5 +9,6 @@ userRouter.post("/addCategory", authenticatedToken, requireRole("Administrador")
 userRouter.get("/getComments/:id", getCommentsByPostController)
 userRouter.get("/getPosts", getAllPostsController)
 userRouter.post("/addCommentByPost", addCommentByPostController)
+userRouter.post("/addPost", authenticatedToken, requireRole("Vendedor"), addPostController)
 
 export default userRouter
