@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Navigate, Outlet, redirect, useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import type { RootState } from "../../app/providers/store";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
