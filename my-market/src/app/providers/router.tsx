@@ -6,6 +6,7 @@ import RoleRedirect from "./components/RoleRedirect";
 import ProtectedRoutes from "./ProtectedRoutes";
 import MarketPage from "../../pages/Market/MarketPage";
 import VendedorPage from "../../pages/User/Vendedor/VendedorPage";
+import AdminPage from "../../pages/User/Admin/AdminPage";
 
 
 const router = createBrowserRouter([
@@ -36,9 +37,9 @@ const router = createBrowserRouter([
         element: <RoleRedirect/> 
       },
       {
-        path: "/admin",
+        path: "/administrador",
         element: <ProtectedRoutes allowedRoles={["Administrador"]}>
-          <div>ADMINISTRADOR</div>
+          <AdminPage/>
         </ProtectedRoutes>,
       },
       {
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
       {
         path: "/comprador",
         element: <ProtectedRoutes allowedRoles={["Comprador"]}>
-          <div>Comprador</div>
+          <VendedorPage/>
         </ProtectedRoutes>,
         children: [
           {

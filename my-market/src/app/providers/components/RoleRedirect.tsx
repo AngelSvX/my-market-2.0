@@ -23,7 +23,7 @@ function RoleRedirect() {
 
   switch (userData.role) {
     case "Administrador":
-      return <Navigate to="/admin" replace />;
+      return <Navigate to="/administrador" replace />;
     case "Vendedor":
       return <Navigate to="/vendedor" replace />;
     case "Comprador":
