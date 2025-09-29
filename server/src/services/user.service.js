@@ -4,15 +4,16 @@ import { myMarketDB } from "../settings/db.js";
 export const userProfileData = async (id) => {
   try {
     const myPostQuery = `
-    SELECT w.title, w.description, w.price, w.status, c.name as category, w.created_at FROM works w
-    INNER JOIN users u ON w.user_id = u.id
-    INNER JOIN categories c ON w.category_id = c.id
-    WHERE u.id = ?;
+      SELECT w.title, w.description, w.price, w.status, c.name as category, wi.url, w.created_at FROM work_images wi
+      INNER JOIN works w ON wi.work_id = w.id
+      INNER JOIN users u ON w.user_id = u.id
+      INNER JOIN categories c on w.category_id = c.id
+      WHERE u.id = ?;
   `;
 
     const myProfileQuery = `
-    SELECT u.name, u.email FROM users u
-    WHERE u.id = ?
+      SELECT u.name, u.email FROM users u
+      WHERE u.id = ?
     `;
 
     const myRoleQuery = `
@@ -21,9 +22,13 @@ export const userProfileData = async (id) => {
       WHERE u.id = ?
     `;
 
-    const [profileResponse] = await myMarketDB.execute(myProfileQuery, [id]);
+    const [[profileResponse]] = await myMarketDB.execute(myProfileQuery, [id]);
+
+    console.log(profileResponse)
 
     const [roleResponse] = await myMarketDB.execute(myRoleQuery, [id]);
+
+    console.log(roleResponse)
 
     const role = roleResponse[0];
     if (role.roleName !== "Vendedor") {
