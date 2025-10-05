@@ -3,7 +3,6 @@ import UserProfile from '../../../features/market-place/user/ui/UserProfile'
 function AdminPage() {
   return (
     <div>
-      AdminPage
       <UserProfile/>
     </div>
   )

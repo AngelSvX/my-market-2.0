@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import type { DecodedToken } from "../../features/auth/login/model/types";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { restartValue } from "../../features/market-place/user/model/slice";
 
 export const PageLayout = () => {
   const { userData } = useSelector((state: RootState) => state.login);
@@ -81,6 +82,7 @@ export const PageLayout = () => {
                     onClick={() => {
                       localStorage.removeItem("token");
                       localStorage.removeItem("role");
+                      restartValue()
 
                       setTimeout(() => {
                         navigate("/login", { replace: true });

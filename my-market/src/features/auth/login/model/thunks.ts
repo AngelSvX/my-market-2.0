@@ -15,7 +15,7 @@ export const fetchLogin = createAsyncThunk<
 
       return res.data;
     } catch (error: any) {
-      const message =
+      const message =  
         error.response?.data?.message || "Error desconocido en el servidor";
       return rejectWithValue(message);
     }
