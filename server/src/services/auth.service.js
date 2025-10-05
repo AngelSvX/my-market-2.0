@@ -30,10 +30,10 @@ export const auth = async ({ email, password }) => {
         isMatch: false,
       };
     }
+    const token 
 
     // Todo correcto, se envía la respuesta del usuario al front
-
-    const token = jwt.sign(
+= jwt.sign(
       {
         id: user.id,
         name: user.name,

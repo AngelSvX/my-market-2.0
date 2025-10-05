@@ -11,7 +11,11 @@ export const initialState: ProfileResponseState = {
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    restartValue: (state) => {
+      (state.profileResponse = null)
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProfileData.pending, (state) => {
@@ -26,4 +30,5 @@ export const userSlice = createSlice({
   }
 })
 
+export const { restartValue } = userSlice.actions
 export default userSlice.reducer;
