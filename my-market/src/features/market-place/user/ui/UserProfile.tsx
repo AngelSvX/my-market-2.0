@@ -11,6 +11,7 @@ import Comments from "../../comments/ui/Comments";
 import { Navigate } from "react-router";
 import { CategoryManagement } from "../../categories/ui/CategoryManagement";
 import { CreatePost } from "../../posts/ui/CreatePost";
+import ReviewPosts from "../../posts/ui/ReviewPost";
 
 function UserProfile() {
 
@@ -70,7 +71,7 @@ function UserProfile() {
       )}
 
 
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-8 mb-10 transition-all hover:shadow-2xl">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             <User className="text-blue-600" /> Perfil del Usuario
@@ -117,17 +118,19 @@ function UserProfile() {
                 <FileText className="text-blue-600" /> Mis Publicaciones
               </h3>
               <button
-                className="bg-[#6366F1] text-white py-3 w-2/11 rounded-md flex flex-row items-center justify-evenly cursor-pointer hover:shadow-md shadow-[#6366F1] duration-150 ease-linear"
-                onClick={() => {setOpenPostModal(true)}}
-              > <PlusCircle /> Nueva Publicación</button>
+                onClick={() => setOpenPostModal(true)}
+                className="bg-indigo-500 text-white px-4 py-3 rounded-md flex items-center gap-2 cursor-pointer hover:shadow-md shadow-indigo-400 duration-150 ease-linear"
+              >
+                <PlusCircle /> Nueva Publicación
+              </button>
             </div>
 
             {
-              openPostModal && <CreatePost onClose={() => setOpenPostModal(false)}/>
+              openPostModal && <CreatePost onClose={() => setOpenPostModal(false)} />
             }
 
             {profileResponse.postResponse.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 {profileResponse.postResponse.map((post, idx) => (
                   <article
                     key={idx}
@@ -224,8 +227,13 @@ function UserProfile() {
           </div>
         )}
         {isAdmin && (
-          <div className="mt-10 w-full flex items-start justify-start">
-            <CategoryManagement />
+          <div className="flex flex-col">
+            <div className="mt-10 w-full flex items-start justify-start">
+              <CategoryManagement />
+            </div>
+            <div className="mt-10">
+              <ReviewPosts />
+            </div>
           </div>
         )}
       </div>

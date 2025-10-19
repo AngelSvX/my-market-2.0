@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Post, PostState } from "./types";
-import { fetchPosts } from "./thunks";
+import { addPost, fetchPosts } from "./thunks";
 
 export const initialState: PostState = {
   postList: [],
@@ -24,6 +24,16 @@ export const postsSlice = createSlice({
         (state.loading = false),
           (state.error = "An Error has rejected fetching posts");
       });
+    builder
+      .addCase(addPost.pending, (state) => {
+        (state.loading = true), (state.error = null)
+      })
+      .addCase(addPost.fulfilled, (state) => {
+        (state.loading = false), (state.error = null)
+      })
+      .addCase(addPost.rejected, (state) => {
+        (state.loading = false), (state.error = "An error has ocurred adding the post")
+      })
   },
 });
 
