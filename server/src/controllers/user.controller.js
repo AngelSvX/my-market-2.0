@@ -3,6 +3,7 @@ import {
   addCommentByPost,
   addPost,
   getAllPosts,
+  getCategories,
   getCommentsByPost,
   userProfileData,
 } from "../services/user.service.js";
@@ -22,15 +23,26 @@ export const userProfileDataController = async (req, res) => {
 // Controlador para administradores
 export const addCategoriesController = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { newCategorie } = req.body;
 
-    const response = await addCategories(name);
+    const response = await addCategories(newCategorie);
 
     return res.status(200).json({ response: response });
   } catch (error) {
     return res.status(500).json({ error });
   }
 };
+
+// Controlador para Administradores y Vendedores
+export const getCategoriesController = async (req, res) => {
+  try {
+    const response = await getCategories()
+
+    return res.status(200).json(response)
+  } catch (error) {
+    
+  }
+}
 
 // Controlador para todos
 export const getCommentsByPostController = async (req, res) => {

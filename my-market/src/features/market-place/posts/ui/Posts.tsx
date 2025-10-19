@@ -23,6 +23,7 @@ function getStatusColor(status: WorkStatus) {
       return "bg-yellow-100 text-yellow-700"
   }
 }
+
 function Posts() {
   const posts = useSelector(
     (state: RootState) => state.posts
