@@ -14,12 +14,12 @@ export interface AuthPayload {
 export type Role = "Administrador" | "Vendedor" | "Comprador";
 
 export interface DecodedToken {
-    id: number;
-    name: string;
-    email: string;
-    role: Role;
-    iat: number;
-    exp: number;
+  id: number;
+  name: string;
+  email: string;
+  role: Role;
+  iat: number;
+  exp: number;
 }
 
 export interface LoginState {

@@ -10,6 +10,7 @@ export interface NonSellerResponse {
 
 export interface SellerResponse {
   postResponse: {
+    id: number;
     title: string;
     description: string;
     price: string;

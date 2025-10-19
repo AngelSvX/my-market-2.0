@@ -4,7 +4,7 @@ import { myMarketDB } from "../settings/db.js";
 export const userProfileData = async (id) => {
   try {
     const myPostQuery = `
-      SELECT w.title, w.description, w.price, w.status, c.name as category, wi.url, w.created_at FROM work_images wi
+      SELECT w.id, w.title, w.description, w.price, w.status, c.name as category, wi.url, w.created_at FROM work_images wi
       INNER JOIN works w ON wi.work_id = w.id
       INNER JOIN users u ON w.user_id = u.id
       INNER JOIN categories c on w.category_id = c.id
@@ -89,7 +89,7 @@ export const getAllPosts = async () => {
 };
 
 // Funcionalidad para administrador
-export const addCategories = async (roleName) => {
+export const addCategories = async (newCategorie) => {
   try {
     const addCategoryQuery = `
       INSERT INTO categories 
@@ -97,7 +97,7 @@ export const addCategories = async (roleName) => {
       VALUES (?)
     `;
 
-    const response = await myMarketDB.execute(addCategoryQuery, [roleName]);
+    const response = await myMarketDB.execute(addCategoryQuery, [newCategorie]);
 
     return {
       message: "Inserción de categoría correcta",
@@ -107,6 +107,20 @@ export const addCategories = async (roleName) => {
     throw error;
   }
 };
+
+// Funcionalidad para administradores y vendedores
+export const getCategories = async () => {
+  try {
+    const getCategoriesQuery = `SELECT * FROM categories`
+
+    const [response] = await myMarketDB.execute(getCategoriesQuery)
+
+    return response
+
+  } catch (error) {
+    throw new Error("Sucedió un error trayendo las categorías: ", error)
+  }
+}
 
 // Funcionalidad para todos - Añadir Comentarios
 export const addCommentByPost = async ({work_id, user_id, rating, comment}) => {

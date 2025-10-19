@@ -22,3 +22,13 @@ export interface PostState {
   loading: boolean;
   error: string | null;
 }
+
+export interface CreatePostRequest {
+  user_id: number
+  category_id: number
+  title: string
+  description: string
+  price: number
+  status: WorkStatus
+  url: string
+}

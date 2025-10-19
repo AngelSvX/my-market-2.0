@@ -3,6 +3,7 @@ import loginReducer from '../../features/auth/login/model/slice'
 import postsReducer from '../../features/market-place/posts/model/slice'
 import commentsReducer from '../../features/market-place/comments/model/slice'
 import userReducer from '../../features/market-place/user/model/slice'
+import categoriesReducer from '../../features/market-place/categories/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     posts: postsReducer,
     comments: commentsReducer,
     user: userReducer,
+    categories: categoriesReducer
   }
 })
 
