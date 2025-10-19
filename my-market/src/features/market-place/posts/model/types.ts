@@ -30,5 +30,5 @@ export interface CreatePostRequest {
   description: string
   price: number
   status: WorkStatus
-  url: string
+  url: File | null | string
 }

@@ -6,5 +6,5 @@ const API_URL = "http://localhost:3000/api/v1/user"
 
 export const postsApi = {
   getPosts : () => axios.get<Post[]>(`${API_URL}/getPosts`),
-  addPost: (payload: CreatePostRequest) => axiosInstance.post<void>('/addPost', {payload: payload})
+  addPost: (payload: CreatePostRequest) => axiosInstance.post<void>('/addPost', payload)
 }
