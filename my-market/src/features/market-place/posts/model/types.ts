@@ -1,7 +1,7 @@
 export enum WorkStatus {
   PENDING = "pendiente",
   APPROVED = "aprobado",
-  DISAPPROVED = "desaprobado",
+  DISAPPROVED = "rechazado",
 }
 
 export interface Post {
@@ -31,4 +31,9 @@ export interface CreatePostRequest {
   price: number
   status: WorkStatus
   url: File | null | string
+}
+
+export interface UpdateStatusRequest {
+  id: number,
+  status: WorkStatus
 }

@@ -2,6 +2,7 @@ import {
   addCategories,
   addCommentByPost,
   addPost,
+  changeStatus,
   getAllPosts,
   getCategories,
   getCommentsByPost,
@@ -104,3 +105,17 @@ export const addPostController = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+export const changeStatusController = async (req, res) => {
+  try {
+    const id = req.params.id
+    const { status } = req.body
+
+    const response = await changeStatus(id, status)
+
+    res.status(200).json(response)
+
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
