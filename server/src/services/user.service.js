@@ -195,3 +195,23 @@ export const addPost = async ({ user_id, category_id, title, description, price,
   }
 
 }
+
+export const changeStatus = async (id, status) => {
+  try {
+    const updateQuery = `
+      UPDATE works w
+      SET w.status = ?
+      WHERE id = ?
+    `
+
+    const response = await myMarketDB.execute(updateQuery, [
+      status,
+      id
+    ])
+
+    return response
+
+  } catch (error) {
+    throw error
+  }
+}
