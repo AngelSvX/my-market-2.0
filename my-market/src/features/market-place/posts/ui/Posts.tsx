@@ -5,8 +5,9 @@ import { useEffect } from "react"
 import { fetchPosts } from "../model/thunks"
 import { WorkStatus } from "../model/types"
 import type { Post } from "../model/types"
-import { MessageCircle } from "lucide-react"
+import { MessageCircle, ShoppingCart } from "lucide-react"
 import { commentOpenById } from "../../comments/model/slice"
+import { addArticle } from "../../cart/model/slice"
 import { fetchCommentsByPost } from '../../comments/model/thunks';
 import Comments from "../../comments/ui/Comments"
 import { Navigate } from "react-router"
@@ -29,6 +30,10 @@ function Posts() {
     (state: RootState) => state.posts
   )
 
+  const { articleList } = useSelector(
+    (state: RootState) => state.cart
+  )
+
   const comments = useSelector((state: RootState) => state.comments)
   const { userData } = useSelector((state: RootState) => state.login)
 
@@ -38,7 +43,11 @@ function Posts() {
     dispatch(fetchPosts())
   }, [dispatch])
 
-  if(!userData){
+  useEffect(() => {
+    console.log(articleList)
+  }, [articleList])
+
+  if (!userData) {
     return <Navigate to="/login" replace />
   }
 
@@ -52,7 +61,7 @@ function Posts() {
     <section className="px-6 py-10 bg-gray-50 min-h-screen">
 
       {comments.commentOpenId && (
-        <Comments userId={userData.id} workId={comments.commentOpenId}/>
+        <Comments userId={userData.id} workId={comments.commentOpenId} />
       )}
 
 
@@ -100,17 +109,27 @@ function Posts() {
                 </span>
               </div>
 
-              <button
-                type="button"
-                className="mt-3 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                onClick={(e) => {
-                  e.preventDefault()
-                  dispatch(commentOpenById(post.id))
-                  dispatch(fetchCommentsByPost(post.id))
-                }} >
-                <MessageCircle className="w-4 h-4" />
-                Comentar
-              </button>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  className="mt-3 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors w-7/10"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    dispatch(commentOpenById(post.id))
+                    dispatch(fetchCommentsByPost(post.id))
+                  }} >
+                  <MessageCircle className="w-4 h-4" />
+                  Comentar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch(addArticle({ id: post.id, title: post.title, description: post.description, image: post.url, price: Number(post.price) }))
+                  }}
+                  className="mt-3 flex items-center justify-center w-2/10 bg-black rounded-lg hover:bg-black/80 transition-colors">
+                  <ShoppingCart color="white" />
+                </button>
+              </div>
             </div>
 
             <footer className="px-5 py-3 bg-gray-50 border-t flex items-center justify-between text-sm text-gray-600">
