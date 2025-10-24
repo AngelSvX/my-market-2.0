@@ -5,6 +5,7 @@ import { testConnection } from "./settings/db.js";
 import dataRouter from "./routes/data.routes.js";
 import loginRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
 
 const app = express();
 dotenv.config();
@@ -20,5 +21,6 @@ app.listen(process.env.PORT, () => {
 app.use("/api/v1/auth", loginRouter)
 app.use("/api/v1/data", dataRouter)
 app.use("/api/v1/user", userRouter)
+app.use("/api/v1/payments", paymentRoutes)
 
 testConnection();

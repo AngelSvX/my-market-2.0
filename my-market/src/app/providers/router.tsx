@@ -7,64 +7,59 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import MarketPage from "../../pages/Market/MarketPage";
 import VendedorPage from "../../pages/User/Vendedor/VendedorPage";
 import AdminPage from "../../pages/User/Admin/AdminPage";
+import CartPage from "../../pages/Cart/ui/CartPage";
 
 
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <LoginPage/>,
+    element: <LoginPage />,
   },
   {
     path: '/register',
-    element: <RegisterPage/>
+    element: <RegisterPage />
   },
   {
     path: '/market',
-    element: <PageLayout/>,
-    children:[
+    element: <PageLayout />,
+    children: [
       {
         path: "/market",
-        element: <MarketPage/>
+        element: <MarketPage />
       }
     ]
   },
   {
     path: '/',
-    element: <PageLayout/>,
+    element: <PageLayout />,
     children: [
       {
         index: true,
-        element: <RoleRedirect/> 
+        element: <RoleRedirect />
       },
       {
         path: "/administrador",
         element: <ProtectedRoutes allowedRoles={["Administrador"]}>
-          <AdminPage/>
+          <AdminPage />
         </ProtectedRoutes>,
       },
       {
         path: "/vendedor",
         element: <ProtectedRoutes allowedRoles={["Vendedor"]}>
-          <VendedorPage/>
-        </ProtectedRoutes>,
-        children:[
-          {
-            path: "/vendedor/prueba",
-            element: "Aquí solo debería de ingresar el vendedor"
-          }
-        ]
+          <VendedorPage />
+        </ProtectedRoutes>
       },
       {
         path: "/comprador",
         element: <ProtectedRoutes allowedRoles={["Comprador"]}>
-          <VendedorPage/>
+          <VendedorPage />
         </ProtectedRoutes>,
-        children: [
-          {
-            path: "/comprador/prueba",
-            element: "Aquí solo debería de ingresar el comprador"
-          }
-        ]
+      },
+      {
+        path: "/comprador/carrito",
+        element: <ProtectedRoutes allowedRoles={["Comprador"]}>
+          <CartPage/>
+        </ProtectedRoutes>
       }
     ]
   },
