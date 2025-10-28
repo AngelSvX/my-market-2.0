@@ -11,9 +11,6 @@ function ProtectedRoutes({ children, allowedRoles }: ProtectedRoute) {
   // const token = localStorage.getItem("token") || ""
   const role = localStorage.getItem("role") || ""
 
-  const { userData } = useSelector((state: RootState) => state.login);
-  console.log(userData)
-
   try {
     if (allowedRoles.includes(role)) {
       return children

@@ -97,13 +97,13 @@ export const PageLayout = () => {
                 </div>
               </MenuItems>
             </Menu>
-            <Link to="/comprador/carrito" className="flex items-center justify-center bg-[#6366f1] w-10 rounded-full cursor-pointer hover:bg-[#2f31aa] duration-200">
-              {
-                userData?.role === "Comprador" && (
-                  <ShoppingCart color="white"/>
-                )
-              }
-            </Link>
+            {
+              userData?.role === "Comprador" && (
+                <Link to="/comprador/carrito" className="flex items-center justify-center bg-[#6366f1] w-10 rounded-full cursor-pointer hover:bg-[#2f31aa] duration-200">
+                  <ShoppingCart color="white" />
+                </Link>
+              )
+            }
           </div>
         </div>
       </header>

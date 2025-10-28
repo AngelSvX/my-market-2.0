@@ -1,20 +1,18 @@
-import { stripe } from "../settings/stripe.js";
+import { payWithSripe } from "../services/payment.service.js";
 
 export const createPaymentIntent = async (req, res) => {
   try {
-    const {amount, currency} = req.body
+    const {amount, currency = "usd", metadata} = req.body
+    const { user_id } = metadata
 
-    // amout debe estar en centavos
+    console.log(amount)
+    console.log(currency)
+    console.log(metadata)
+    console.log(user_id)
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency,
-      automatic_payment_methods: {enabled: true}
-    })
+    const paymentIntent = await payWithSripe({amount,currency, metadata, user_id})
 
-    res.json({
-      clientSecret: paymentIntent.client_secret
-    })
+    res.status(200).json(paymentIntent)
 
   } catch (error) {
       console.error("Error al crear PaymentIntent: ", error.message);
