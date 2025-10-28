@@ -11,6 +11,6 @@ userRouter.get("/getPosts", getAllPostsController)
 userRouter.post("/addCommentByPost", addCommentByPostController)
 userRouter.post("/addPost", authenticatedToken, requireRole("Vendedor"), addPostController)
 userRouter.get("/getCategories", getCategoriesController)
-userRouter.put("/updateStatus/:id", changeStatusController)
+userRouter.put("/updateStatus/:id", authenticatedToken, requireRole("Administrador"), changeStatusController)
 
 export default userRouter

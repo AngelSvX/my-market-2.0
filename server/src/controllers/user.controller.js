@@ -84,12 +84,12 @@ export const addCommentByPostController = async (req, res) => {
   }
 };
 
-// Controlador para vendedores - Falta aplicar en el front-end
+// Controlador para vendedores
 export const addPostController = async (req, res) => {
   try {
     const { user_id, category_id, title, description, price, status, url } =
       req.body;
-      
+
     const response = await addPost({
       user_id,
       category_id,
@@ -106,16 +106,16 @@ export const addPostController = async (req, res) => {
   }
 };
 
+// Controlador solo para administradores
 export const changeStatusController = async (req, res) => {
   try {
-    const id = req.params.id
-    const { status } = req.body
+    const id = req.params.id;
+    const { status } = req.body;
 
-    const response = await changeStatus(id, status)
+    const response = await changeStatus(id, status);
 
-    res.status(200).json(response)
-
+    res.status(200).json(response);
   } catch (error) {
-    res.status(500).json(error)
+    res.status(500).json(error);
   }
-}
+};

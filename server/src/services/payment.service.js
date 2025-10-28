@@ -36,3 +36,22 @@ export const payWithSripe = async ({ amount, currency = "usd", metadata, user_id
     throw error
   }
 };
+
+export const getTransactionsByUser = async (id) => {
+  try {
+    const getTransactionQuery = `
+      SELECT p.metadata, p.amount, p.currency FROM payments p
+      INNER JOIN users u ON u.id = p.user_id
+      WHERE p.user_id = ?;
+    `;
+
+    const [response] = await myMarketDB.execute(getTransactionQuery, [
+      id
+    ])
+
+    return response
+
+  } catch (error) {
+    throw error
+  }
+};
