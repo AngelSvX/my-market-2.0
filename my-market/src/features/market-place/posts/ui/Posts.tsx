@@ -110,25 +110,45 @@ function Posts() {
               </div>
 
               <div className="flex justify-between">
-                <button
-                  type="button"
-                  className="mt-3 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors w-7/10"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    dispatch(commentOpenById(post.id))
-                    dispatch(fetchCommentsByPost(post.id))
-                  }} >
-                  <MessageCircle className="w-4 h-4" />
-                  Comentar
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    dispatch(addArticle({ id: post.id, title: post.title, description: post.description, image: post.url, price: Number(post.price) }))
-                  }}
-                  className="mt-3 flex items-center justify-center w-2/10 bg-black rounded-lg hover:bg-black/80 transition-colors">
-                  <ShoppingCart color="white" />
-                </button>
+                {
+                  userData.role === "Comprador" ? (
+                    <div className="w-full flex justify-between">
+                      <button
+                        type="button"
+                        className="mt-3 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors w-7/10"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          dispatch(commentOpenById(post.id))
+                          dispatch(fetchCommentsByPost(post.id))
+                        }} >
+                        <MessageCircle className="w-4 h-4" />
+                        Comentar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          dispatch(addArticle({ id: post.id, title: post.title, description: post.description, image: post.url, price: Number(post.price) }))
+                        }}
+                        className="mt-3 flex items-center justify-center w-2/10 bg-black rounded-lg hover:bg-black/80 transition-colors">
+                        <ShoppingCart color="white" />
+                      </button>
+                    </div>
+                  )
+                    :
+                    (
+                      <button
+                        type="button"
+                        className="mt-3 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors w-full"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          dispatch(commentOpenById(post.id))
+                          dispatch(fetchCommentsByPost(post.id))
+                        }} >
+                        <MessageCircle className="w-4 h-4" />
+                        Comentar
+                      </button>
+                    )
+                }
               </div>
             </div>
 

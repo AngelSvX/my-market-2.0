@@ -5,6 +5,7 @@ import commentsReducer from '../../features/market-place/comments/model/slice'
 import userReducer from '../../features/market-place/user/model/slice'
 import categoriesReducer from '../../features/market-place/categories/model/slice'
 import cartReducer from '../../features/market-place/cart/model/slice'
+import paymentReducer from '../../features/market-place/payment/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
     comments: commentsReducer,
     user: userReducer,
     categories: categoriesReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    payment: paymentReducer
   }
 })
 
