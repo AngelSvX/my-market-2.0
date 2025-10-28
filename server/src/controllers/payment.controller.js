@@ -1,4 +1,4 @@
-import { payWithSripe } from "../services/payment.service.js";
+import { getTransactionsByUser, payWithSripe } from "../services/payment.service.js";
 
 export const createPaymentIntent = async (req, res) => {
   try {
@@ -19,3 +19,16 @@ export const createPaymentIntent = async (req, res) => {
       res.status(500).json({error: error.message})
   }
 }
+
+export const getTransactionsByUserController = async (req, res) => {
+  try {
+    const id = req.params.id
+
+    const response = await getTransactionsByUser(id);
+
+    res.status(200).json(response)
+
+  } catch (error) {
+    res.status(500).json(error)
+  }
+};

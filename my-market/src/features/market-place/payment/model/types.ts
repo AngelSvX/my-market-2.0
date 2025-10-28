@@ -21,6 +21,7 @@ export interface PaymentState {
   payment: PaymentElement | null;
   metadata: MetadataPayment | null;
   wasPaid: boolean;
+  transactions: TransactionResponse[];
   loading: boolean;
   error: string | null;
 }
@@ -28,4 +29,17 @@ export interface PaymentState {
 export interface PaymentResponse {
   client_secret: string;
   client_id: string
+}
+
+export interface MetadataResponse {
+  user_id: number;
+  articles: Article[]
+  clientName: string;
+  clientEmail: string;
+}
+
+export interface TransactionResponse{
+  metadata: MetadataResponse;
+  amount: string;
+  currency: string;
 }

@@ -11,3 +11,11 @@ export const payArticle = createAsyncThunk<
     return await paymentApi.payItems(payload);
   }
 );
+
+export const getTransactions = createAsyncThunk(
+  "pay/transactions",
+  async (id: number) => {
+    const res = await paymentApi.getTransactionById(id)
+    return res.data
+  }
+)

@@ -12,6 +12,8 @@ import { Navigate } from "react-router";
 import { CategoryManagement } from "../../categories/ui/CategoryManagement";
 import { CreatePost } from "../../posts/ui/CreatePost";
 import ReviewPosts from "../../posts/ui/ReviewPost";
+import { getTransactions } from "../../payment/model/thunks";
+import TransactionCard from "../../payment/ui/TransactionCard";
 
 function UserProfile() {
 
@@ -37,6 +39,12 @@ function UserProfile() {
     }
   }, [dispatch, userData?.id]);
 
+  const transactions = useSelector((state: RootState) => state.payment)
+
+  useEffect(() => {
+    dispatch(getTransactions(userData.id))
+  }, [])
+
   if (loading) return <LoaderMessage message="Cargando datos de usuario..." />;
   if (error) return <div className="text-red-500">{error}</div>;
   if (!profileResponse) return <p>No hay datos del perfil aún.</p>;
@@ -48,8 +56,7 @@ function UserProfile() {
 
   const isAdmin = userData.role == "Administrador" ? true : false
 
-  console.log(isAdmin)
-  console.log(userData.role)
+  const isClient = userData.role === "Comprador"
 
   function getStatusColor(status: WorkStatus) {
     switch (status) {
@@ -62,6 +69,8 @@ function UserProfile() {
         return "bg-yellow-100 text-yellow-700"
     }
   }
+
+  console.log(transactions.transactions)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-8">
@@ -236,6 +245,23 @@ function UserProfile() {
             </div>
           </div>
         )}
+
+        {
+          isClient && (
+            transactions.loading ? (
+              <div className="text-center text-gray-500 py-4">Cargando transacciones...</div>
+            ) : transactions.transactions && transactions.transactions.length > 0 ? (
+              <div className="flex flex-col gap-6 mt-8">
+                {transactions.transactions.map((transaction, idx) => (
+                  <TransactionCard key={idx} {...transaction} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center text-gray-500 py-4">No tienes transacciones aún.</div>
+            )
+          )
+        }
+
       </div>
     </div>
   );

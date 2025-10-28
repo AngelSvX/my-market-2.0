@@ -24,11 +24,11 @@ export const userProfileData = async (id) => {
 
     const [[profileResponse]] = await myMarketDB.execute(myProfileQuery, [id]);
 
-    console.log(profileResponse)
+    console.log(profileResponse);
 
     const [roleResponse] = await myMarketDB.execute(myRoleQuery, [id]);
 
-    console.log(roleResponse)
+    console.log(roleResponse);
 
     const role = roleResponse[0];
     if (role.roleName !== "Vendedor") {
@@ -111,51 +111,61 @@ export const addCategories = async (newCategorie) => {
 // Funcionalidad para administradores y vendedores
 export const getCategories = async () => {
   try {
-    const getCategoriesQuery = `SELECT * FROM categories`
+    const getCategoriesQuery = `SELECT * FROM categories`;
 
-    const [response] = await myMarketDB.execute(getCategoriesQuery)
+    const [response] = await myMarketDB.execute(getCategoriesQuery);
 
-    return response
-
+    return response;
   } catch (error) {
-    throw new Error("Sucedió un error trayendo las categorías: ", error)
+    throw new Error("Sucedió un error trayendo las categorías: ", error);
   }
-}
+};
 
 // Funcionalidad para todos - Añadir Comentarios
-export const addCommentByPost = async ({work_id, user_id, rating, comment}) => {
+export const addCommentByPost = async ({
+  work_id,
+  user_id,
+  rating,
+  comment,
+}) => {
   try {
     const addCommentQuery = `
       INSERT INTO reviews
       (work_id, user_id, rating, comment)
       VALUES(?, ?, ?, ?)
-    `
+    `;
 
     const [result] = await myMarketDB.execute(addCommentQuery, [
       work_id,
       user_id,
       rating,
       comment,
-    ])
+    ]);
 
-    return result
-
+    return result;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 // Funcionalidad solo para vendedores
-export const addPost = async ({ user_id, category_id, title, description, price, status, url }) => {
+export const addPost = async ({
+  user_id,
+  category_id,
+  title,
+  description,
+  price,
+  status,
+  url,
+}) => {
   try {
-    
     const addPostQuery = `
       INSERT INTO works
       (user_id, category_id, title, description, price, status)
       VALUES(?, ?, ?, ?, ?, ?)
-      `
+      `;
 
-    console.log("Aquí se comenzará con el work")
+    console.log("Aquí se comenzará con el work");
 
     const [work] = await myMarketDB.execute(addPostQuery, [
       user_id,
@@ -163,55 +173,50 @@ export const addPost = async ({ user_id, category_id, title, description, price,
       title,
       description,
       price,
-      status
-    ])
+      status,
+    ]);
 
-    console.log("Aquí se termina con el work")
+    console.log("Aquí se termina con el work");
 
-    console.log(work)
+    console.log(work);
 
     const addPostImageQuery = `
     INSERT INTO work_images
     (work_id, url)
     VALUES(?, ?)
-    `
+    `;
 
-    console.log("Aquí comienza la inserción a work_image", work.insertId)
+    console.log("Aquí comienza la inserción a work_image", work.insertId);
 
     const [work_image] = await myMarketDB.execute(addPostImageQuery, [
       work.insertId,
-      url
-    ])
+      url,
+    ]);
 
-    console.log("Aquí ya se finalizó la inserción de ambos")
-    
-    return{
+    console.log("Aquí ya se finalizó la inserción de ambos");
+
+    return {
       work,
-      work_image
-    }
-
+      work_image,
+    };
   } catch (error) {
-    throw error
+    throw error;
   }
+};
 
-}
-
+// Funcionalidad solo para administradores
 export const changeStatus = async (id, status) => {
   try {
     const updateQuery = `
       UPDATE works w
       SET w.status = ?
       WHERE id = ?
-    `
+    `;
 
-    const response = await myMarketDB.execute(updateQuery, [
-      status,
-      id
-    ])
+    const response = await myMarketDB.execute(updateQuery, [status, id]);
 
-    return response
-
+    return response;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};

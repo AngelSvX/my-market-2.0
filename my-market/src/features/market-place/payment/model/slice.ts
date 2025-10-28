@@ -1,11 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { MetadataPayment, PaymentElement, PaymentState } from "./types";
-import { payArticle } from "./thunks";
+import type { MetadataPayment, PaymentElement, PaymentState, TransactionResponse } from "./types";
+import { getTransactions, payArticle } from "./thunks";
 
 const initialState: PaymentState = {
   payment: null,
   metadata: null,
   wasPaid: false,
+  transactions: [],
   loading: false,
   error: null,
 };
@@ -48,6 +49,19 @@ export const paymentSlice = createSlice({
       .addCase(payArticle.rejected, (state) => {
         state.loading = false
         state.error = "An error has ocurred fetching pays"
+      })
+    builder
+      .addCase(getTransactions.pending, (state) => {
+        state.loading = true,
+        state.error = null
+      })
+      .addCase(getTransactions.fulfilled, (state, action: PayloadAction<TransactionResponse[]>) => {
+        state.loading = false
+        state.transactions = action.payload
+      })
+      .addCase(getTransactions.rejected, (state) => {
+        state.loading = false
+        state.error = "An error has ocurred fetching transactions"
       })
   },
 });

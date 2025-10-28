@@ -32,7 +32,6 @@ export const authenticatedToken = (req, res, next) => {
 };
 
 export const requireRole = (neededRole) => {
-  
   return (req, res, next) => {
     if(req.user.role !== neededRole){
       return res.status(403).json({

@@ -1,5 +1,5 @@
 import axios, { type AxiosResponse } from "axios";
-import type { PaymentElement } from "../model/types";
+import type { PaymentElement, TransactionResponse } from "../model/types";
 const API_URL = "http://localhost:3000/api/v1/payments";
 
 export const paymentApi = {
@@ -10,4 +10,5 @@ export const paymentApi = {
     );
     return res.data;
   },
+  getTransactionById: async (id: number) => axios.get<TransactionResponse[]>(`${API_URL}/getTransactionByUser/${id}`)
 };
