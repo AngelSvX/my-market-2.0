@@ -220,3 +220,20 @@ export const changeStatus = async (id, status) => {
     throw error;
   }
 };
+
+export const filterByCategory = async (id) => {
+  try {
+    const filterCategoryQuery = `
+      SELECT * FROM works w
+      INNER JOIN categories c ON c.id = w.category_id
+      WHERE category_id = ?;
+    `
+
+    const [response] = await myMarketDB.execute(filterCategoryQuery, [id]);
+
+    return response;
+
+  } catch (error) {
+    throw error;
+  }
+}
