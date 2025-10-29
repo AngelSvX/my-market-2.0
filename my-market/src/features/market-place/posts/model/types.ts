@@ -18,6 +18,7 @@ export interface Post {
 }
 
 export interface PostState {
+  allPosts: Post[];
   postList: Post[];
   loading: boolean;
   error: string | null;

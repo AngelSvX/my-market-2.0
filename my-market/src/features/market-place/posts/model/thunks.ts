@@ -23,3 +23,11 @@ export const updatePostStatus = createAsyncThunk(
     await postsApi.updatePostStatus(payload)
   }
 )
+
+export const filterByCategory = createAsyncThunk(
+  "post/filterByCategory",
+  async (category_id: number) => {
+    const res = await postsApi.filterByCategory(category_id)
+    return res.data
+  }
+)

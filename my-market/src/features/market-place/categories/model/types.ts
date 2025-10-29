@@ -5,6 +5,7 @@ export interface Categorie{
 
 export interface CaterogiesState {
   categories: Categorie[],
+  categorySelected: string | null
   loading: boolean,
   error: string | null
 }
