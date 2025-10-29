@@ -7,14 +7,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-/**
- * Botón reutilizable y estilizado.
- * 
- * Ejemplo de uso:
- * <Button variant="primary" onClick={handleClick}>Guardar</Button>
- * <Button variant="outline" loading>Enviando...</Button>
- */
-
 const Button: React.FC<ButtonProps> = ({
   children,
   variant = "primary",
