@@ -16,6 +16,7 @@ export interface SellerResponse {
     price: string;
     status: string;
     category: string;
+    category_id: number;
     url: string;
     created_at: string;
   }[];

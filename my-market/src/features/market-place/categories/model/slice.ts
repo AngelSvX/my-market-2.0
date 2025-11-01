@@ -4,6 +4,7 @@ import { addCategory, fetchCategories } from "./thunks";
 
 export const initialState: CaterogiesState = {
   categories: [],
+  categorySelected: null,
   loading: false,
   error: null,
 };
@@ -11,11 +12,15 @@ export const initialState: CaterogiesState = {
 export const categoriesSlice = createSlice({
   name: "categories",
   initialState,
-  reducers: {},
+  reducers: {
+    selectCategory: (state, action: PayloadAction<string>) => {
+      state.categorySelected = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategories.pending, (state) => {
-        (state.loading = true ), (state.error = null) 
+        (state.loading = true), (state.error = null);
       })
       .addCase(
         fetchCategories.fulfilled,
@@ -25,22 +30,20 @@ export const categoriesSlice = createSlice({
       )
       .addCase(fetchCategories.rejected, (state) => {
         (state.loading = false),
-        (state.error = "An error has ocurred fetching categories data")
+          (state.error = "An error has ocurred fetching categories data");
+      });
+    builder
+      .addCase(addCategory.pending, (state) => {
+        (state.loading = true), (state.error = null);
       })
-      builder
-        .addCase(addCategory.pending, (state) => {
-          (state.loading = true ),
-          (state.error = null ) 
-        })
-        .addCase(addCategory.fulfilled, (state) => {
-          (state.loading = false),
-          (state.error = null)
-        })
-        .addCase(addCategory.rejected, (state) => {
-          (state.loading = false),
-          (state.error = null)
-        } )
+      .addCase(addCategory.fulfilled, (state) => {
+        (state.loading = false), (state.error = null);
+      })
+      .addCase(addCategory.rejected, (state) => {
+        (state.loading = false), (state.error = null);
+      });
   },
 });
 
-export default categoriesSlice.reducer
+export const { selectCategory } = categoriesSlice.actions;
+export default categoriesSlice.reducer;

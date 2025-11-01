@@ -18,7 +18,9 @@ export interface Post {
 }
 
 export interface PostState {
+  allPosts: Post[];
   postList: Post[];
+  updateState: "updating" | "updated" | "error" | null
   loading: boolean;
   error: string | null;
 }
@@ -31,6 +33,14 @@ export interface CreatePostRequest {
   price: number
   status: WorkStatus
   url: File | null | string
+}
+
+export interface UpdatePostRequest {
+  id: number,
+  category_id: number,
+  title: string,
+  description: string,
+  price: number
 }
 
 export interface UpdateStatusRequest {

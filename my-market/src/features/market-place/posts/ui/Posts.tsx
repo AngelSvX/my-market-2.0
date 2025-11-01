@@ -11,6 +11,9 @@ import { addArticle } from "../../cart/model/slice"
 import { fetchCommentsByPost } from '../../comments/model/thunks';
 import Comments from "../../comments/ui/Comments"
 import { Navigate } from "react-router"
+import FilterCategory from "./FilterCategory"
+import Button from "../../../../shared/ui/Button/Button"
+import { filterPostsByCategory } from "../model/slice"
 
 
 function getStatusColor(status: WorkStatus) {
@@ -39,18 +42,20 @@ function Posts() {
 
   const dispatch = useDispatch<AppDispatch>()
 
+  const { categorySelected } = useSelector((state: RootState) => state.categories)
+
   useEffect(() => {
     dispatch(fetchPosts())
   }, [dispatch])
 
   useEffect(() => {
-    console.log(articleList)
-  }, [articleList])
+    console.log(categorySelected)
+    console.log(posts.postList)
+  }, [articleList, posts.postList])
 
   if (!userData) {
     return <Navigate to="/login" replace />
   }
-
 
   if (posts.loading) return <LoaderMessage message="Cargando publicaciones..." />
   if (posts.error) return <div className="text-red-500">{posts.error}</div>
@@ -68,6 +73,23 @@ function Posts() {
       <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
         Últimas publicaciones
       </h1>
+
+      <div className="w-full mb-6">
+        <label className="block text-md font-semibold text-gray-700 mb-3">
+          Filtrar publicaciones
+        </label>
+
+        <div className="grid grid-cols-4 gap-4 items-end">
+          <FilterCategory />
+          <div className="col-span-1">
+            <Button className="h-12 w-full" variant="primary" onClick={() => {
+              dispatch(filterPostsByCategory(categorySelected!))
+            }}>
+              Buscar
+            </Button>
+          </div>
+        </div>
+      </div>
 
       <form className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.postList.map((post: Post) => (

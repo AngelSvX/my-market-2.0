@@ -7,6 +7,7 @@ import {
   getAllPosts,
   getCategories,
   getCommentsByPost,
+  updatePost,
   userProfileData,
 } from "../services/user.service.js";
 
@@ -131,5 +132,20 @@ export const filterByCategoryController = async (req, res) => {
 
   } catch (error) {
     res.status(500).json(error);    
+  }
+}
+
+export const updatePostController = async (req, res) => {
+  try {
+    const id = req.params.id
+
+    const {category_id, title, description, price} = req.body
+
+    const response = await updatePost(id, category_id, title, description, price)
+
+    res.status(200).json(response)
+
+  } catch (error) {
+    res.status(500).json(error)
   }
 }
