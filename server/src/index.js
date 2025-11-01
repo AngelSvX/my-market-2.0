@@ -22,5 +22,6 @@ app.use("/api/v1/auth", loginRouter)
 app.use("/api/v1/data", dataRouter)
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/payments", paymentRoutes)
+console.log("cambios 1/11/25 - 14:25:00");
 
 testConnection();
