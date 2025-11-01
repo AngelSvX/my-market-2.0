@@ -7,12 +7,13 @@ import type { LoginRequest } from '../model/types';
 import { useNavigate } from "react-router-dom";
 import { LoaderMessage } from "../../../../shared/ui/Loader/LoaderMessage";
 import { Eye, EyeClosed } from "lucide-react";
+import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from "@react-oauth/google"
 
 function LoginForm() {
 
   const navigate = useNavigate()
 
-  const {error, loading} = useSelector((state: RootState) => state.login);
+  const { error, loading } = useSelector((state: RootState) => state.login);
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -34,19 +35,17 @@ function LoginForm() {
     }
   };
 
+  const handleSuccess = (credentialResponse: CredentialResponse) => {
+    console.log("Credenciales: ", credentialResponse)
+  }
+
+  const handleError = () => {
+    console.log("Login Failed")
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
-  /**
-   * 
-  useEffect(() => {
-    if (data?.response?.token && userData?.role) {
-      localStorage.setItem("token", data.response.token);
-      localStorage.setItem("role", userData?.role)
-    }
-  }, [data?.response?.token]);
-   */
 
   if (loading) return <LoaderMessage message="Obteniendo Datos..." />
 
@@ -103,6 +102,10 @@ function LoginForm() {
       {
         error && <p className="text-sm text-center text-red-500 relative bottom-4">{error}</p>
       }
+
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GCLOUD_CLIENT_ID}>
+        <GoogleLogin useOneTap={false} onError={handleError} onSuccess={handleSuccess} />
+      </GoogleOAuthProvider>
 
       <p className="text-sm text-center text-gray-600">
         ¿No tienes cuenta?

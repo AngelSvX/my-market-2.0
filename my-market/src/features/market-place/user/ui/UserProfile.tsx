@@ -3,7 +3,7 @@ import type { AppDispatch, RootState } from "../../../../app/providers/store";
 import { fetchProfileData } from "../model/thunks";
 import { useEffect, useState } from "react";
 import { LoaderMessage } from "../../../../shared/ui/Loader/LoaderMessage";
-import { FileText, Mail, MessageCircle, PlusCircle, Shield, User } from "lucide-react";
+import { FileText, Mail, MessageCircle, Pencil, PlusCircle, Shield, User } from "lucide-react";
 import { WorkStatus } from "../../posts/model/types";
 import { commentOpenById } from "../../comments/model/slice";
 import { fetchCommentsByPost } from "../../comments/model/thunks";
@@ -14,10 +14,14 @@ import { CreatePost } from "../../posts/ui/CreatePost";
 import ReviewPosts from "../../posts/ui/ReviewPost";
 import { getTransactions } from "../../payment/model/thunks";
 import TransactionCard from "../../payment/ui/TransactionCard";
+import { UpdatePost } from "../../posts/ui/UpdatePost";
 
 function UserProfile() {
 
   const [openPostModal, setOpenPostModal] = useState<boolean>(false)
+
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false)
+  const [selectedPost, setSelectedPost] = useState<null | any>(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -33,11 +37,13 @@ function UserProfile() {
 
   const comments = useSelector((state: RootState) => state.comments)
 
+  const post = useSelector((state: RootState) => state.posts)
+
   useEffect(() => {
-    if (userData?.id !== undefined) {
+    if ( post.updateState === "updated" || userData?.id !== undefined) {
       dispatch(fetchProfileData(userData.id));
     }
-  }, [dispatch, userData?.id]);
+  }, [dispatch, userData?.id, post.updateState]);
 
   const transactions = useSelector((state: RootState) => state.payment)
 
@@ -69,8 +75,6 @@ function UserProfile() {
         return "bg-yellow-100 text-yellow-700"
     }
   }
-
-  console.log(transactions.transactions)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-8">
@@ -179,17 +183,29 @@ function UserProfile() {
                         </span>
                       </div>
 
-                      <button
-                        type="button"
-                        className="mt-3 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                        onClick={(e) => {
-                          e.preventDefault()
-                          dispatch(commentOpenById(post.id))
-                          dispatch(fetchCommentsByPost(post.id))
-                        }} >
-                        <MessageCircle className="w-4 h-4" />
-                        Comentar
-                      </button>
+                      <div className="w-full flex justify-between items-center">
+                        <button
+                          type="button"
+                          className="mt-3 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors w-10/12"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            dispatch(commentOpenById(post.id));
+                            dispatch(fetchCommentsByPost(post.id));
+                          }}
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          Comentar
+                        </button>
+
+                        <button
+                          type="button"
+                          className="mt-3 p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-full shadow-sm transition-all w-9 h-9 flex items-center justify-center"
+                          onClick={() => { setSelectedPost(post), setOpenEditModal(true)}}
+                          title="Editar publicación"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
 
                     <footer className="px-5 py-3 bg-gray-50 border-t flex items-center justify-between text-sm text-gray-600">
@@ -203,6 +219,11 @@ function UserProfile() {
                     </footer>
                   </article>
                 ))}
+
+                {
+                  openEditModal && <UpdatePost onClose={() => setOpenEditModal(false)} postUpdateData={{ id: selectedPost.id, category_id: selectedPost.category_id, title: selectedPost.title, description: selectedPost.description, price: Number(selectedPost.price) }} />
+                }
+
               </div>
             ) : (
               <p className="text-gray-500 italic text-center">

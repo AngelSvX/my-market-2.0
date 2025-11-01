@@ -4,7 +4,7 @@ import { myMarketDB } from "../settings/db.js";
 export const userProfileData = async (id) => {
   try {
     const myPostQuery = `
-      SELECT w.id, w.title, w.description, w.price, w.status, c.name as category, wi.url, w.created_at FROM work_images wi
+      SELECT w.id, w.title, w.description, w.price, w.status, c.name as category, c.id as category_id, wi.url, w.created_at FROM work_images wi
       INNER JOIN works w ON wi.work_id = w.id
       INNER JOIN users u ON w.user_id = u.id
       INNER JOIN categories c on w.category_id = c.id
@@ -235,5 +235,29 @@ export const filterByCategory = async (id) => {
 
   } catch (error) {
     throw error;
+  }
+}
+
+export const updatePost = async (id, category_id, title, description, price) => {
+  try {
+
+    const myUpdatePostQuery = `
+      UPDATE works w
+      SET w.category_id=?, w.title=?, w.description=?, w.price=?
+      WHERE id = ?
+    `
+
+    const [response] = await myMarketDB.execute(myUpdatePostQuery, [
+      category_id,
+      title,
+      description,
+      price,
+      id
+    ])
+
+    return response
+
+  } catch (error) {
+    throw error
   }
 }

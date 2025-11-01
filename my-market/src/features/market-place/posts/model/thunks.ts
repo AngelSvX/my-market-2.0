@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { CreatePostRequest, Post, UpdateStatusRequest } from "./types";
+import type { CreatePostRequest, Post, UpdatePostRequest, UpdateStatusRequest } from "./types";
 import { postsApi } from "../api";
 
 export const fetchPosts = createAsyncThunk(
@@ -29,5 +29,12 @@ export const filterByCategory = createAsyncThunk(
   async (category_id: number) => {
     const res = await postsApi.filterByCategory(category_id)
     return res.data
+  }
+)
+
+export const updatePost = createAsyncThunk(
+  "post/updatePost",
+  async (payload: UpdatePostRequest) : Promise<void> => {
+    await postsApi.updatePost(payload)
   }
 )
