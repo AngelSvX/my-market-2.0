@@ -32,26 +32,35 @@ function Comments({ workId, userId }: { workId: number; userId: number }) {
   // const [userId, setUserId] = useState<number>(0)
   const [rating, setRating] = useState<number>(1)
   const [comment, setComment] = useState<string>("")
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    const payload: CommentParams = {
-      work_id: workId,
-      user_id: userId,
-      rating: rating,
-      comment: comment
-    }
-
-    const result = await dispatch(addCommentByPost(payload))
-
-    if (addCommentByPost.fulfilled.match(result)) {
-      setComment("")
-      setRating(0)
-      dispatch(fetchCommentsByPost(workId))
-    }
-
+  // Validación: no permitir vacío o solo espacios
+  if (!comment.trim()) {
+    setErrorMsg("El comentario no puede estar vacío.");
+    return;
   }
+
+  setErrorMsg(""); // limpiar error si es válido
+
+  const payload: CommentParams = {
+    work_id: workId,
+    user_id: userId,
+    rating: rating,
+    comment: comment.trim()
+  };
+
+  const result = await dispatch(addCommentByPost(payload));
+
+  if (addCommentByPost.fulfilled.match(result)) {
+    setComment("");
+    setRating(1);
+    dispatch(fetchCommentsByPost(workId));
+  }
+};
+
 
   useEffect(() => {
     console.log(userId)
@@ -175,6 +184,9 @@ function Comments({ workId, userId }: { workId: number; userId: number }) {
                 placeholder={`¿Qué opinas tú, ${userData?.name || decoded?.name}?`}
                 className="w-full rounded-xl border border-gray-300 pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 text-sm shadow-sm transition"
               />
+              {errorMsg && (
+  <p className="text-red-500 text-sm mt-1">{errorMsg}</p>
+)}
             </div>
           </div>
           <div className='w-1/4'>

@@ -18,6 +18,10 @@ export const UpdatePost = ({ onClose, postUpdateData }: UpdatePostProps) => {
     description: postUpdateData.description,
     price: postUpdateData.price,
   });
+  const [errors, setErrors] = useState({
+  title: "",
+  price: "",
+});
 
   console.log(postUpdateData)
 
@@ -38,11 +42,33 @@ export const UpdatePost = ({ onClose, postUpdateData }: UpdatePostProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("PUBLICACIÓN ACTUALZADA:", formData);
-    onClose();
-  };
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const newErrors = { title: "", price: "" };
+  let hasError = false;
+
+  // Validacion del título
+  if (!formData.title.trim()) {
+    newErrors.title = "El título no puede estar vacío.";
+    hasError = true;
+  }
+
+  // Validacion del precio
+  const precio = Number(formData.price);
+  if (isNaN(precio) || precio <= 0) {
+    newErrors.price = "El precio debe ser mayor a 0.";
+    hasError = true;
+  }
+
+  setErrors(newErrors);
+
+  // Si hay errores, NO lo va actualizar pe mano
+  if (hasError) return;
+
+  console.log("PUBLICACIÓN ACTUALIZADA:", formData);
+  onClose();
+};
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/30">
@@ -69,6 +95,10 @@ export const UpdatePost = ({ onClose, postUpdateData }: UpdatePostProps) => {
               className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
               required
             />
+            {errors.title && (
+  <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+)}
+
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -145,17 +175,26 @@ export const UpdatePost = ({ onClose, postUpdateData }: UpdatePostProps) => {
               className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
               required
             />
+            {errors.price && (
+  <p className="text-red-500 text-sm mt-1">{errors.price}</p>
+)}
+
           </div>
           <div>
           </div>
           <button
             type="button"
             className="mt-3 bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-medium transition"
-            onClick={async (e) => {
-              const ultimateUpdatePostRequest: UpdatePostRequest = formData
-              dispatch(updatePost(ultimateUpdatePostRequest))
-              handleSubmit(e)
-            }}
+              onClick={async (e) => {
+                const fakeEvent = e as unknown as React.FormEvent;
+                handleSubmit(fakeEvent);
+
+                // Solo actualizar si NO hay errores
+                if (!errors.title && !errors.price) {
+                  const ultimateUpdatePostRequest: UpdatePostRequest = formData;
+                  dispatch(updatePost(ultimateUpdatePostRequest));
+                }
+              }}
           >
             Actualizar
           </button>

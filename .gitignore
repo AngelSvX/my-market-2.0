@@ -1,5 +1,12 @@
-node_modules/
-dist/
-.vite/
+# FRONTEND
+my-market/node_modules/
+my-market/dist/
+my-market/.vite/
+
+# BACKEND
+server/node_modules/
+server/dist/
+
+# ENV
 .env
 .env.*
