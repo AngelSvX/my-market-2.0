@@ -60,7 +60,7 @@ function LoginForm() {
           {...register("email", {
             required: "El email es obligatorio",
             pattern: {
-              // 🔍 Valida emails que terminen en .com, .net, .org o .es
+              // Valida emails que terminen en .com, .net, .org o .es
               value: /^[^\s@]+@[^\s@]+\.(com|net|org|es)$/,
               message: "El email debe terminar en .com, .net, .org o .es",
             },
@@ -71,43 +71,53 @@ function LoginForm() {
         )}
       </div>
 
-      {/* Campo Password */}
-      <div className="space-y-2">
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Contraseña
-        </label>
-        <div className="relative">
-          <input
-            id="password"
-            type={visiblePassword ? "text" : "password"}
-            placeholder="••••••••"
-            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            {...register("password", {
-              required: "La contraseña es obligatoria",
-              minLength: {
-                value: 6,
-                message: "Debe tener al menos 6 caracteres",
-              },
-            })}
-          />
-          {visiblePassword ? (
-            <Eye
-              color="#000000"
-              className="absolute right-3 top-1/2 h-5 w-5 text-gray-400 -translate-y-1/2 cursor-pointer"
-              onClick={() => setVisiblePassword(false)}
-            />
-          ) : (
-            <EyeClosed
-              color="#000000"
-              className="absolute right-3 top-1/2 h-5 w-5 text-gray-400 -translate-y-1/2 cursor-pointer"
-              onClick={() => setVisiblePassword(true)}
-            />
-          )}
-        </div>
-        {errors.password && (
-          <p className="text-sm text-red-500">{errors.password.message}</p>
-        )}
-      </div>
+{/* Campo Password */}
+<div className="space-y-2">
+  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+    Contraseña
+  </label>
+  <div className="relative">
+    <input
+      id="password"
+      type={visiblePassword ? "text" : "password"}
+      placeholder="••••••••"
+      className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+      {...register("password", {
+        required: "La contraseña es obligatoria",
+        minLength: {
+          value: 6,
+          message: "Debe tener al menos 6 caracteres",
+        },
+        pattern: {
+          value: /^[^?\¿:\s]+$/,
+          message: "La contraseña no puede contener ?, ¿, : ni espacios",
+        },
+        validate: {
+          notOnlyNumbers: (value) =>
+            !/^\d+$/.test(value) || "La contraseña no puede ser solo números",
+        },
+      })}
+    />
+
+    {visiblePassword ? (
+      <Eye
+        color="#000000"
+        className="absolute right-3 top-1/2 h-5 w-5 text-gray-400 -translate-y-1/2 cursor-pointer"
+        onClick={() => setVisiblePassword(false)}
+      />
+    ) : (
+      <EyeClosed
+        color="#000000"
+        className="absolute right-3 top-1/2 h-5 w-5 text-gray-400 -translate-y-1/2 cursor-pointer"
+        onClick={() => setVisiblePassword(true)}
+      />
+    )}
+  </div>
+
+  {errors.password && (
+    <p className="text-sm text-red-500">{errors.password.message}</p>
+  )}
+</div>
 
       {/* Botón Ingresar */}
       <button

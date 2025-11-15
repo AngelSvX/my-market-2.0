@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import type { CreatePostRequest } from "../model/types";
 import { WorkStatus } from "../model/types";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,50 +14,55 @@ interface CreatePostProps {
 }
 
 export const CreatePost = ({ onClose }: CreatePostProps) => {
-  const [formData, setFormData] = useState<CreatePostRequest>({
-    user_id: 0,
-    category_id: 0,
-    title: "",
-    description: "",
-    price: 0,
-    url: null,
-    status: WorkStatus.PENDING,
-  });
+  const dispatch = useDispatch<AppDispatch>();
+  const { userData } = useSelector((state: RootState) => state.login);
+  const { categories } = useSelector((state: RootState) => state.categories);
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    watch,
+  } = useForm<CreatePostRequest>();
 
-  const { userData } = useSelector((state: RootState) => state.login);
-  const { categories } = useSelector((state: RootState) => state.categories)
+  const selectedImage = watch("url");
 
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, user_id: userData?.id ?? 0 }));
+    dispatch(fetchCategories());
+  }, []);
+
+  useEffect(() => {
+    if (userData?.id) setValue("user_id", userData.id);
   }, [userData]);
-
-  useEffect(() => {
-    dispatch(fetchCategories())
-  }, [])
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData((prev) => ({ ...prev, url: file }));
+      setValue("url", file); // react-hook-form registra el file
       setImagePreview(URL.createObjectURL(file));
     }
-    console.log(file)
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Publicación creada:", formData);
+  const onSubmit = async (data: CreatePostRequest) => {
+    if (!(data.url instanceof File)) {
+      console.log("Formato de imagen inválido");
+      return;
+    }
+
+    const fileUrlCloud = await uploadImageToCloudinary(data.url);
+
+    const finalData: CreatePostRequest = {
+      ...data,
+      price: Number(data.price),
+      category_id: Number(data.category_id),
+      status: WorkStatus.PENDING,
+      url: fileUrlCloud,
+    };
+
+    dispatch(addPost(finalData));
     onClose();
   };
 
@@ -69,150 +75,138 @@ export const CreatePost = ({ onClose }: CreatePostProps) => {
         >
           <X size={20} />
         </button>
+
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
           Nueva Publicación
         </h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          {/* Título */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Título
             </label>
             <input
-              name="title"
+              {...register("title", { required: "El título es obligatorio" })}
               placeholder="Ej: Servicio de diseño web"
-              value={formData.title}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-              required
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
+            {errors.title && (
+              <p className="text-sm text-red-500">{errors.title.message}</p>
+            )}
           </div>
+
+          {/* Descripción */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Descripción
+              Descripción (opcional)
             </label>
             <textarea
-              name="description"
+              {...register("description")}
               placeholder="Describe tu servicio o producto..."
-              value={formData.description}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm max-h-40 min-h-20"
-              rows={3}
-              required
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 max-h-40 min-h-20"
             />
           </div>
+
+          {/* Categoría */}
           <div>
-            <label
-              htmlFor="category_id"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               Categoría
             </label>
-            <div className="relative">
-              <select
-                id="category_id"
-                name="category_id"
-                value={formData.category_id}
-                onChange={handleChange}
-                className="w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition"
-              >
-                <option value="">Selecciona una categoría</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+            <select
+              {...register("category_id", {
+                required: "La categoría es obligatoria",
+              })}
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Selecciona una categoría</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
 
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
-            </div>
+            {errors.category_id && (
+              <p className="text-sm text-red-500">{errors.category_id.message}</p>
+            )}
           </div>
+
+          {/* Precio */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Precio
             </label>
             <input
-              name="price"
               type="number"
-              placeholder="Ej: 150.00"
-              value={formData.price}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-              required
+              min={1}
+              step="0.01"
+              {...register("price", {
+                required: "El precio es obligatorio",
+                validate: (value) =>
+                  Number(value) > 0 || "El precio debe ser mayor a 0",
+              })}
+              className="w-full border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500"
             />
+
+            {errors.price && (
+              <p className="text-sm text-red-500">{errors.price.message}</p>
+            )}
           </div>
+
+          {/* Imagen */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Imagen del producto
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-blue-500 transition-colors">
+
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-500 transition">
               {imagePreview ? (
                 <div className="relative w-full flex justify-center">
                   <img
                     src={imagePreview}
-                    alt="Vista previa"
                     className="h-40 w-auto rounded-md object-cover"
                   />
                   <button
                     type="button"
-                    onClick={() => setImagePreview(null)}
-                    className="absolute top-2 right-2 bg-white/80 rounded-full p-1 text-gray-600 hover:text-red-500 transition"
+                    onClick={() => {
+                      setImagePreview(null);
+                      setValue("url", null as any);
+                    }}
+                    className="absolute top-2 right-2 bg-white p-1 rounded-full shadow"
                   >
                     <X size={16} />
                   </button>
                 </div>
               ) : (
-                <label className="flex flex-col items-center gap-2 cursor-pointer">
-                  <ImageIcon className="text-gray-400" size={32} />
+                <label className="flex flex-col items-center cursor-pointer">
+                  <ImageIcon size={32} className="text-gray-400" />
                   <span className="text-gray-500 text-sm">
                     Sube una imagen del producto
                   </span>
+
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleImageChange}
                     className="hidden"
+                    {...register("url", {
+                      required: "La imagen es obligatoria",
+                    })}
+                    onChange={handleImageChange}
                   />
                 </label>
               )}
             </div>
+
+            {errors.url && (
+              <p className="text-sm text-red-500">{errors.url.message}</p>
+            )}
           </div>
+
+          {/* Botón */}
           <button
-            type="button"
+            type="submit"
             className="mt-3 bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-medium transition"
-            onClick={ async () => {
-                if (!formData.url || !(formData.url instanceof File)) {
-                    console.log("Formato Inválido - No File Selected");
-                    return;
-                }
-                const fileUrlCloud = await uploadImageToCloudinary(formData.url);
-
-                const ultimatePostRequest : CreatePostRequest = {
-                  user_id: Number(formData.user_id),
-                  category_id: Number(formData.category_id),
-                  title: formData.title,
-                  description: formData.description,
-                  price: Number(formData.price),
-                  status: WorkStatus.PENDING,
-                  url: fileUrlCloud
-                }
-
-                dispatch(addPost(ultimatePostRequest))
-            }}
           >
             Crear publicación
           </button>
