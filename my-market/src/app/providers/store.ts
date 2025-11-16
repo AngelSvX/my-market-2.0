@@ -6,10 +6,12 @@ import userReducer from '../../features/market-place/user/model/slice'
 import categoriesReducer from '../../features/market-place/categories/model/slice'
 import cartReducer from '../../features/market-place/cart/model/slice'
 import paymentReducer from '../../features/market-place/payment/model/slice'
+import registerReducer from '../../features/auth/register/model/slice'
 
 export const store = configureStore({
   reducer: {
     login: loginReducer,
+    register: registerReducer,
     posts: postsReducer,
     comments: commentsReducer,
     user: userReducer,

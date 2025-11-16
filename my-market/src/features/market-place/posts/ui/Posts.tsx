@@ -60,8 +60,8 @@ function Posts() {
   if (posts.loading) return <LoaderMessage message="Cargando publicaciones..." />
   if (posts.error) return <div className="text-red-500">{posts.error}</div>
 
-
-  return (
+  console.log(posts);
+  return ( 
 
     <section className="px-6 py-10 bg-gray-50 min-h-screen">
 
@@ -188,6 +188,7 @@ function Posts() {
       </form>
     </section>
   )
+
 }
 
 export default Posts
