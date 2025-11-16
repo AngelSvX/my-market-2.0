@@ -15,14 +15,12 @@ function LoginForm() {
   const { error, loading } = useSelector((state: RootState) => state.login);
   const [visiblePassword, setVisiblePassword] = useState(false);
 
-  // Inicializamos React Hook Form
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginRequest>();
 
-  // Envío del formulario
   const onSubmit = async (data: LoginRequest) => {
     try {
       await dispatch(fetchLogin(data)).unwrap();
@@ -47,7 +45,7 @@ function LoginForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-sm bg-white px-5 space-y-6"
     >
-      {/* Campo Email */}
+
       <div className="space-y-2">
         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
           Email
@@ -60,7 +58,6 @@ function LoginForm() {
           {...register("email", {
             required: "El email es obligatorio",
             pattern: {
-              // Valida emails que terminen en .com, .net, .org o .es
               value: /^[^\s@]+@[^\s@]+\.(com|net|org|es)$/,
               message: "El email debe terminar en .com, .net, .org o .es",
             },
@@ -71,7 +68,6 @@ function LoginForm() {
         )}
       </div>
 
-{/* Campo Password */}
 <div className="space-y-2">
   <label htmlFor="password" className="block text-sm font-medium text-gray-700">
     Contraseña
@@ -119,7 +115,6 @@ function LoginForm() {
   )}
 </div>
 
-      {/* Botón Ingresar */}
       <button
         type="submit"
         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg shadow-md transition duration-300"
@@ -131,12 +126,10 @@ function LoginForm() {
         <p className="text-sm text-center text-red-500 relative bottom-4">{error}</p>
       )}
 
-      {/* Google Login */}
       <GoogleOAuthProvider clientId={import.meta.env.VITE_GCLOUD_CLIENT_ID}>
         <GoogleLogin useOneTap={false} onError={handleError} onSuccess={handleSuccess} />
       </GoogleOAuthProvider>
 
-      {/* Link a Registro */}
       <p className="text-sm text-center text-gray-600">
         ¿No tienes cuenta?{" "}
         <Link to="/register" className="text-indigo-600 hover:underline">

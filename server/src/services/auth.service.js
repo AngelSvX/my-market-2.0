@@ -58,15 +58,13 @@ export const createUser = async ({
   role_id,
   name,
   email,
-  google_id,
-  password,
-  created_at,
+  password
 }) => {
   try {
     const insertUserQuery = `
       INSERT INTO users 
-      (role_id, name, email, google_id, password, created_at)
-      VALUES (?, ?, ?, ?, ?, ?)
+      (role_id, name, email, password)
+      VALUES (?, ?, ?, ?)
     `;
 
     const passwordHashed = await bcrypt.hash(password, 10);
@@ -75,9 +73,7 @@ export const createUser = async ({
       role_id,
       name,
       email,
-      google_id,
       passwordHashed,
-      created_at,
     ]);
 
     return response;
