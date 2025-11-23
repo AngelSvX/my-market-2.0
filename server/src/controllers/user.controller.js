@@ -8,6 +8,7 @@ import {
   getCategories,
   getCommentsByPost,
   updatePost,
+  updateRole,
   userProfileData,
 } from "../services/user.service.js";
 
@@ -142,6 +143,23 @@ export const updatePostController = async (req, res) => {
     const {category_id, title, description, price} = req.body
 
     const response = await updatePost(id, category_id, title, description, price)
+
+    res.status(200).json(response)
+
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+export const updateRoleController = async (req, res) => {
+  try {
+    const id = req.params.id
+    const {role_id} = req.body
+
+    console.log(id)
+    console.log(role_id)
+
+    const response = await updateRole({id, role_id})
 
     res.status(200).json(response)
 

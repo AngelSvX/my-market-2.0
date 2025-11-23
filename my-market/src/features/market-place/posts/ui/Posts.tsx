@@ -61,6 +61,7 @@ function Posts() {
   if (posts.error) return <div className="text-red-500">{posts.error}</div>
 
   console.log(posts);
+  console.log(userData.role)
   return ( 
 
     <section className="px-6 py-10 bg-gray-50 min-h-screen">

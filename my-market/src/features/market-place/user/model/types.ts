@@ -35,4 +35,5 @@ export interface ProfileResponseState {
   profileResponse: ProfileDataResponse | null;
   loading: boolean;
   error: string | null;
+  hasLoggedOut: boolean
 }

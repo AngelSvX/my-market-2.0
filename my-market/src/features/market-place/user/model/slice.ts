@@ -5,7 +5,8 @@ import { fetchProfileData } from "./thunks";
 export const initialState: ProfileResponseState = {
   profileResponse: null,
   loading: false,
-  error: null
+  error: null,
+  hasLoggedOut: false
 }
 
 export const userSlice = createSlice({
@@ -14,6 +15,9 @@ export const userSlice = createSlice({
   reducers: {
     restartValue: (state) => {
       (state.profileResponse = null)
+    },
+    hasLoggedOutFn: (state: ProfileResponseState, action: PayloadAction<boolean>) => {
+      state.hasLoggedOut = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -30,5 +34,5 @@ export const userSlice = createSlice({
   }
 })
 
-export const { restartValue } = userSlice.actions
+export const { restartValue, hasLoggedOutFn } = userSlice.actions
 export default userSlice.reducer;
