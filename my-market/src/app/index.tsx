@@ -13,6 +13,7 @@ import CartPage from "../pages/Cart/ui/CartPage";
 import { useSelector } from "react-redux";
 import type { RootState } from "./providers/store";
 import FinishRegister from "../features/auth/register/ui/FinishRegister";
+import ForceSelectRole from "../features/auth/login/ui/ForceSelectRole";
 
 
 function App() {
@@ -23,6 +24,10 @@ function App() {
     {
       path: '/login',
       element: <LoginPage />,
+    },
+    {
+      path: '/login/selectRole',
+      element: <ForceSelectRole/>
     },
     {
       path: '/register',

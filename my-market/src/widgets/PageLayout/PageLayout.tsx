@@ -1,16 +1,19 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router";
-import type { RootState } from "../../app/providers/store";
+import type { AppDispatch, RootState } from "../../app/providers/store";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import type { DecodedToken } from "../../features/auth/login/model/types";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { restartValue } from "../../features/market-place/user/model/slice";
+import { hasLoggedOutFn, restartValue } from "../../features/market-place/user/model/slice";
 import { ShoppingCart } from "lucide-react";
+import { useEffect } from "react";
+import { restarLoginParams } from "../../features/auth/login/model/slice";
 
 export const PageLayout = () => {
   const { userData } = useSelector((state: RootState) => state.login);
+  const { hasLoggedOut } = useSelector((state: RootState) => state.user)
 
   const token = localStorage.getItem("token");
   let decoded: DecodedToken | null = null;
@@ -23,7 +26,16 @@ export const PageLayout = () => {
     }
   }
 
+  const dispatch = useDispatch<AppDispatch>()
+
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if(hasLoggedOut){
+      navigate("/login", { replace: true });
+      dispatch(hasLoggedOutFn(false))
+    }
+  }, [hasLoggedOut])
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -84,11 +96,9 @@ export const PageLayout = () => {
                       onClick={() => {
                         localStorage.removeItem("token");
                         localStorage.removeItem("role");
-                        restartValue()
-
-                        setTimeout(() => {
-                          navigate("/login", { replace: true });
-                        }, 0);
+                        dispatch(restartValue())
+                        dispatch(restarLoginParams())
+                        dispatch(hasLoggedOutFn(true))
                       }}
                     >
                       Cerrar sesión

@@ -11,7 +11,7 @@ export interface AuthPayload {
   };
 }
 
-export type Role = "Administrador" | "Vendedor" | "Comprador";
+export type Role = "Administrador" | "Vendedor" | "Comprador" | "Por Definir";
 
 export interface DecodedToken {
   id: number;
@@ -20,11 +20,21 @@ export interface DecodedToken {
   role: Role;
   iat: number;
   exp: number;
+  google_id?: string
 }
 
 export interface LoginState {
   data: AuthPayload | null;
+  google_token: string | null;
   error: string | null;
   loading: boolean;
   userData: DecodedToken | null;
+  getRole: PayloadPutRole | null;
+  google_auth_fullfiled: boolean;
+  roleSelected: boolean;
+}
+
+export interface PayloadPutRole {
+  id: number,
+  role_id: number
 }

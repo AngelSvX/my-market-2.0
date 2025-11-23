@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getRoleData } from "../model/slice";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../app/providers/store";
@@ -15,10 +15,6 @@ function SelectRole() {
   };
 
   const dispatch = useDispatch<AppDispatch>()
-
-  useEffect(() => {
-    console.log(registerData)
-  }, [selectedRole])
 
   return (
     isReadyToSend ?

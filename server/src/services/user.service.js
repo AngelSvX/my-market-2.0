@@ -261,3 +261,23 @@ export const updatePost = async (id, category_id, title, description, price) => 
     throw error
   }
 }
+
+export const updateRole = async ({id, role_id}) => {
+  try {
+    const myUpdateRoleQuery = `
+      UPDATE users
+      SET users.role_id = ?
+      WHERE users.id = ?
+    `
+    
+    const [response] = await myMarketDB.execute(myUpdateRoleQuery, [
+      role_id,
+      id
+    ])
+
+    return response
+
+  } catch (error) {
+    throw error
+  }
+}
