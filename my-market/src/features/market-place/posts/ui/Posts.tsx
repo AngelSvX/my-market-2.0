@@ -14,7 +14,7 @@ import { Navigate } from "react-router"
 import FilterCategory from "./FilterCategory"
 import Button from "../../../../shared/ui/Button/Button"
 import { filterPostsByCategory } from "../model/slice"
-
+import Swal from "sweetalert2"
 
 function getStatusColor(status: WorkStatus) {
   switch (status) {
@@ -62,7 +62,7 @@ function Posts() {
 
   console.log(posts);
   console.log(userData.role)
-  return ( 
+  return (
 
     <section className="px-6 py-10 bg-gray-50 min-h-screen">
 
@@ -150,9 +150,28 @@ function Posts() {
                       <button
                         type="button"
                         onClick={() => {
-                          dispatch(addArticle({ id: post.id, title: post.title, description: post.description, image: post.url, price: Number(post.price) }))
+                          dispatch(
+                            addArticle({
+                              id: post.id,
+                              title: post.title,
+                              description: post.description,
+                              image: post.url,
+                              price: Number(post.price)
+                            })
+                          );
+
+                          Swal.fire({
+                            icon: "success",
+                            title: "¡Añadido!",
+                            text: "El producto fue agregado al carrito",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            toast: true,
+                            position: "top-end",
+                          });
                         }}
-                        className="mt-3 flex items-center justify-center w-2/10 bg-black rounded-lg hover:bg-black/80 transition-colors">
+                        className="mt-3 flex items-center justify-center w-2/10 bg-black rounded-lg hover:bg-black/80 transition-colors"
+                      >
                         <ShoppingCart color="white" />
                       </button>
                     </div>

@@ -14,6 +14,7 @@ import { restarLoginParams } from "../../features/auth/login/model/slice";
 export const PageLayout = () => {
   const { userData } = useSelector((state: RootState) => state.login);
   const { hasLoggedOut } = useSelector((state: RootState) => state.user)
+  const { articleList } = useSelector((state: RootState) => state.cart)
 
   const token = localStorage.getItem("token");
   let decoded: DecodedToken | null = null;
@@ -31,7 +32,7 @@ export const PageLayout = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if(hasLoggedOut){
+    if (hasLoggedOut) {
       navigate("/login", { replace: true });
       dispatch(hasLoggedOutFn(false))
     }
@@ -109,7 +110,10 @@ export const PageLayout = () => {
             </Menu>
             {
               userData?.role === "Comprador" && (
-                <Link to="/comprador/carrito" className="flex items-center justify-center bg-[#6366f1] w-10 rounded-full cursor-pointer hover:bg-[#2f31aa] duration-200">
+                <Link to="/comprador/carrito" className="flex items-center justify-center bg-[#6366f1] w-10 rounded-full cursor-pointer hover:bg-[#2f31aa] duration-200 relative">
+                  <div className="w-5 h-5 bg-red-500 rounded-full absolute bottom-7 left-6">
+                    <p className="text-white text-sm font-bold left-1.5 absolute">{articleList.length}</p>
+                  </div>
                   <ShoppingCart color="white" />
                 </Link>
               )
