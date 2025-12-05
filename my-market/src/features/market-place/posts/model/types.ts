@@ -20,6 +20,7 @@ export interface Post {
 export interface PostState {
   allPosts: Post[];
   postList: Post[];
+  wasChanged: boolean;
   updateState: "updating" | "updated" | "error" | null
   loading: boolean;
   error: string | null;

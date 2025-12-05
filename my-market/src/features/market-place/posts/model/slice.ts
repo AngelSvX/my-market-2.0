@@ -5,6 +5,7 @@ import { addPost, fetchPosts, updatePost, updatePostStatus } from "./thunks";
 export const initialState: PostState = {
   allPosts: [],
   postList: [],
+  wasChanged: false,
   updateState: null,
   loading: false,
   error: null,
@@ -14,6 +15,9 @@ export const postsSlice = createSlice({
   name: "posts",
   initialState,
   reducers: {
+    resetWasChanged: (state) => {
+      state.wasChanged = false;
+    },
     filterPostsByCategory: (state, action: PayloadAction<string>) => {
       const category = action.payload;
 
@@ -57,7 +61,8 @@ export const postsSlice = createSlice({
         (state.loading = true), (state.error = null);
       })
       .addCase(updatePostStatus.fulfilled, (state) => {
-        (state.loading = false), (state.error = null);
+        (state.loading = false), (state.error = null),
+        (state.wasChanged = true)
       })
       .addCase(updatePostStatus.rejected, (state) => {
         (state.loading = false),
@@ -76,5 +81,5 @@ export const postsSlice = createSlice({
   },
 });
 
-export const { filterPostsByCategory } = postsSlice.actions;
+export const { filterPostsByCategory, resetWasChanged } = postsSlice.actions;
 export default postsSlice.reducer;
