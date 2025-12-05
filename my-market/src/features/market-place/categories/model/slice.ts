@@ -5,6 +5,7 @@ import { addCategory, fetchCategories } from "./thunks";
 export const initialState: CaterogiesState = {
   categories: [],
   categorySelected: null,
+  wasAdded: false,
   loading: false,
   error: null,
 };
@@ -15,6 +16,9 @@ export const categoriesSlice = createSlice({
   reducers: {
     selectCategory: (state, action: PayloadAction<string>) => {
       state.categorySelected = action.payload;
+    },
+    resetWasAdded: (state) => {
+      state.wasAdded = false;
     },
   },
   extraReducers: (builder) => {
@@ -37,7 +41,8 @@ export const categoriesSlice = createSlice({
         (state.loading = true), (state.error = null);
       })
       .addCase(addCategory.fulfilled, (state) => {
-        (state.loading = false), (state.error = null);
+        (state.loading = false), (state.error = null),
+        (state.wasAdded = true)
       })
       .addCase(addCategory.rejected, (state) => {
         (state.loading = false), (state.error = null);
@@ -45,5 +50,5 @@ export const categoriesSlice = createSlice({
   },
 });
 
-export const { selectCategory } = categoriesSlice.actions;
+export const { selectCategory, resetWasAdded } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

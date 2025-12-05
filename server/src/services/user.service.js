@@ -75,9 +75,10 @@ export const getAllPosts = async () => {
   try {
     const myQuery = `
     SELECT w.id, w.title, w.description, w.status, w.price, w.created_at, c.name as category, wi.url, u.name, u.email FROM works w
-    INNER JOIN categories c ON w.category_id = c.id
-    INNER JOIN users u ON w.user_id = u.id
-    INNER JOIN work_images wi ON wi.work_id = w.id
+        INNER JOIN categories c ON w.category_id = c.id
+        INNER JOIN users u ON w.user_id = u.id
+        INNER JOIN work_images wi ON wi.work_id = w.id
+    WHERE w.status NOT IN ("rechazado")
     `;
 
     const [response] = await myMarketDB.execute(myQuery);

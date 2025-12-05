@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../app/providers/store";
 import { fetchCategories, addCategory } from '../model/thunks'
+import { resetWasAdded } from "../model/slice";
 
 export function CategoryManagement() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -11,13 +12,14 @@ export function CategoryManagement() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { categories } = useSelector(
+  const { categories, wasAdded } = useSelector(
     (state: RootState) => state.categories
   );
 
   useEffect(() => {
     dispatch(fetchCategories())
-  }, [categories])
+    dispatch(resetWasAdded())
+  }, [wasAdded])
 
   return (
     <div className="bg-white border border-gray-200 rounded-3xl p-8 shadow-sm w-3/9">

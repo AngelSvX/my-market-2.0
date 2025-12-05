@@ -5,6 +5,8 @@ import { postsApi } from "../api";
 export const fetchPosts = createAsyncThunk(
   'posts/fetchPosts',
   async () : Promise<Post[]> => {
+
+    console.log("SE ESTÁ EJECUTANDO GETPOSTS")
     const res = await postsApi.getPosts()
     return res.data
   }

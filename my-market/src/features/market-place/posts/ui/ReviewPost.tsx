@@ -6,10 +6,11 @@ import { useEffect } from "react";
 import { fetchPosts } from "../model/thunks";
 import Swal from 'sweetalert2'
 import { updatePostStatus } from "../model/thunks";
+import { resetWasChanged } from "../model/slice";
 
 export default function ReviewPosts() {
 
-  const { postList } = useSelector(
+  const { postList, wasChanged } = useSelector(
     (state: RootState) => state.posts
   )
 
@@ -17,7 +18,8 @@ export default function ReviewPosts() {
 
   useEffect(() => {
     dispatch(fetchPosts())
-  }, [postList])
+    dispatch(resetWasChanged())
+  }, [wasChanged])
 
   const pendingPosts = postList.filter((p) => p.status == WorkStatus.PENDING)
 
