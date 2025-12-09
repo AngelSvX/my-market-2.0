@@ -7,13 +7,13 @@ import { LoaderMessage } from "../../../../shared/ui/Loader/LoaderMessage";
 import { Eye, EyeClosed } from "lucide-react";
 import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from "@react-oauth/google";
 import { useEffect, useState } from "react";
-import type { LoginRequest } from "../model/types";
+import type { LoginRequest, Role } from "../model/types";
 import { getGoogleToken } from "../model/slice";
 
 function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { error, loading, google_token, userData, google_auth_fullfiled } = useSelector((state: RootState) => state.login);
+  const { error, loading, google_token, userData, google_auth_fullfiled, roleSelected} = useSelector((state: RootState) => state.login);
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const {
@@ -50,31 +50,65 @@ function LoginForm() {
     }
   }, [userData]);
 
-  const handleError = () => {
-    console.log("Login Failed");
-  };
+ const handleError = () => {
+      console.log("Login Failed");
+    };
 
-  
-  useEffect(() => {
-    if (google_auth_fullfiled) {
-      if(userData?.role === undefined){
-        if(google_token){
-          dispatch(googleLogin(google_token))
-          console.log(userData?.role)
-        }
-      }else{
-        // Aquí está el miserable bug :)
-        if(userData.role === "Administrador" || userData.role === "Comprador" || userData.role === "Vendedor"){
-          navigate("/market")
+    
+    /**
+   * 
+   * 
+   *  
+    
+    useEffect(() => {
+      if (google_auth_fullfiled) {
+        if(userData?.role === undefined){
+          if(google_token){
+            dispatch(googleLogin(google_token))
+            console.log(userData?.role)
+          }
         }else{
-          navigate("/login/selectRole")
+          // Aquí está el miserable bug :)
+          if(userData.role === "Administrador" || userData.role === "Comprador" || userData.role === "Vendedor"){
+            navigate("/market")
+          }else{
+            navigate("/login/selectRole")
+          }
         }
+      }
+    }, [google_auth_fullfiled, userData]);
+   * 
+   * 
+   */
+
+  const validRoles: Role[] = ["Administrador", "Vendedor", "Comprador"];
+
+  useEffect(() => {
+    if (google_auth_fullfiled && userData) {
+      if (validRoles.includes(userData.role)) {
+        navigate("/market");
+      } else {
+        navigate("/login/selectRole");
       }
     }
   }, [google_auth_fullfiled, userData]);
-  
+
+
+  useEffect(() => {
+    if (userData?.role && validRoles.includes(userData.role)) {
+      localStorage.setItem("role", userData.role);
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (roleSelected && userData) {
+      navigate("/market");
+    }
+  }, [roleSelected, userData]);
+
+
   if (loading) return <LoaderMessage message="Obteniendo Datos..." />;
-  
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
