@@ -1,12 +1,17 @@
 # FRONTEND
-my-market/node_modules/
+my-market/node_modules/*
 my-market/dist/
 my-market/.vite/
 
 # BACKEND
-server/node_modules/
+server/node_modules/*
 server/dist/
 
 # ENV
 .env
 .env.*
+
+/node_modules/*
+
+/server/node_modules/*
+/my-market/node_modules/*
