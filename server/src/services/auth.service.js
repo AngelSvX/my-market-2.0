@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { myMarketDB } from "../settings/db.js";
 import { verifyGoogleToken } from "../utils/verifyGoogleToken.js";
