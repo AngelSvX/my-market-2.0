@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Navigate } from "react-router"
 import type { RootState } from "../store";
 import { useSelector } from "react-redux";
