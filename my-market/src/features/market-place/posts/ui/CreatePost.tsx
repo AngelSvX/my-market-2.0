@@ -25,10 +25,7 @@ export const CreatePost = ({ onClose }: CreatePostProps) => {
     handleSubmit,
     setValue,
     formState: { errors },
-    watch,
   } = useForm<CreatePostRequest>();
-
-  const selectedImage = watch("url");
 
   useEffect(() => {
     dispatch(fetchCategories());
