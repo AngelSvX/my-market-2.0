@@ -1,8 +1,10 @@
 import axios from "axios";
 import type { AuthPayload, DecodedToken, LoginRequest, PayloadPutRole } from "../model/types";
 
-const API_LOGIN_URL = "http://localhost:3000/api/v1/auth"
-const API_USER_URL = "http://localhost:3000/api/v1/user"
+const API_URL = import.meta.env.VITE_API_URL
+
+const API_LOGIN_URL = `${API_URL}/api/v1/auth`
+const API_USER_URL = `${API_URL}/api/v1/user`
 
 export const loginApi = {
   login: (payload: LoginRequest) => axios.post<AuthPayload>(`${API_LOGIN_URL}/login`, payload),
